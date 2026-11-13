@@ -1,0 +1,3949 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Mật Mã Vương Quốc Realia - Toán 7</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-sky: linear-gradient(180deg, #9ad9ff 0%, #d8f2ff 60%, #e7f9ec 100%);
+      --navy: #231f42;
+      --gold: #ffc42e;
+      --gold-dark: #e09f00;
+      --cream: #fffdf7;
+      --green: #22c55e;
+      --green-bg: #dcfce7;
+      --teal: #0f5c52;
+      --teal-light: #e6f2f0;
+      --red: #ef4444;
+      --red-bg: #fee2e2;
+      --card-shadow: 0 5px 0 var(--navy);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1a1830;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      color: var(--navy);
+    }
+
+    #app {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background: var(--bg-sky);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      box-shadow: 0 0 30px rgba(0,0,0,0.4);
+      transition: max-width 0.25s ease;
+    }
+
+    #app.wide-mode {
+      max-width: 960px;
+      background: #f8fafc;
+    }
+
+    /* Clouds decoration */
+    .cloud {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .cloud::before, .cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 50%;
+    }
+    .c1 { width: 120px; height: 36px; top: 75px; left: -20px; }
+    .c1::before { width: 50px; height: 50px; top: -24px; left: 20px; }
+    .c2 { width: 140px; height: 40px; top: 145px; right: -25px; }
+    .c2::before { width: 60px; height: 60px; top: -28px; left: 30px; }
+
+    /* Screens */
+    .screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      z-index: 1;
+      padding: 16px;
+    }
+    .screen.active {
+      display: flex;
+    }
+
+    /* Buttons */
+    .btn {
+      border: 3px solid var(--navy);
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--navy);
+      background: #ffffff;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 var(--navy);
+    }
+    .btn-gold { background: var(--gold); }
+    .btn-green { background: #4ade80; }
+    .btn-teal { background: var(--teal); color: #ffffff; }
+    .btn-sm {
+      padding: 9px 14px;
+      font-size: 15px;
+      border-radius: 14px;
+      box-shadow: 0 3px 0 var(--navy);
+      width: auto;
+    }
+
+    /* Home Screen */
+    .home-wrap {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-top: 24px;
+      padding-bottom: 24px;
+      gap: 14px;
+    }
+    .q-logo { width: 84px; height: 84px; margin: 0 auto; }
+    .game-title {
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin: 4px 0;
+      color: var(--gold);
+      -webkit-text-stroke: 2.2px var(--navy);
+      text-shadow: 0 4px 0 var(--navy);
+      letter-spacing: 0.5px;
+    }
+    .game-title span { display: block; color: #ffffff; }
+    .subtitle { font-size: 16px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
+    .teacher-card {
+      background: var(--cream);
+      border: 3px solid var(--navy);
+      border-radius: 18px;
+      padding: 12px 16px;
+      width: 100%;
+      box-shadow: 0 4px 0 var(--navy);
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+    .lands-preview {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      font-size: 34px;
+      margin: 8px 0;
+    }
+    .audio-controls {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .teacher-link {
+      background: none;
+      border: none;
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 800;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: 6px;
+      padding: 6px;
+    }
+
+    /* Top HUD */
+    .hud {
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 3px solid var(--navy);
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .hud-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .avatar-circle {
+      width: 44px; height: 44px; border-radius: 50%; background: #fde68a;
+      border: 3px solid var(--navy); display: flex; align-items: center;
+      justify-content: center; font-size: 24px; flex-shrink: 0;
+    }
+    .hud-info { flex: 1; min-width: 0; }
+    .hud-name-row { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 900; }
+    .hud-lvl { color: #6366f1; font-size: 13px; }
+    .xp-bar {
+      width: 100%; height: 10px; background: #e2e8f0;
+      border: 2px solid var(--navy); border-radius: 99px; overflow: hidden; margin-top: 3px;
+    }
+    .xp-fill { height: 100%; background: #8b5cf6; width: 0%; transition: width 0.3s ease; }
+    .xp-text { font-size: 11px; font-weight: 800; color: #475569; }
+    .coin-pill {
+      background: #fffbeb; border: 2.5px solid var(--navy); border-radius: 99px;
+      padding: 5px 10px; font-weight: 900; font-size: 14px;
+      display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+    }
+    .icon-btn {
+      width: 38px; height: 38px; border-radius: 50%; border: 2.5px solid var(--navy);
+      background: #ffffff; display: flex; align-items: center; justify-content: center;
+      font-size: 17px; cursor: pointer; flex-shrink: 0;
+    }
+
+    /* Map Screen */
+    .map-container {
+      flex: 1; padding: 20px 16px 90px; display: flex;
+      flex-direction: column-reverse; align-items: center; gap: 28px; position: relative;
+    }
+    .land-node {
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; z-index: 2; width: 210px;
+    }
+    .land-node:nth-child(odd) { align-self: flex-start; margin-left: 16px; }
+    .land-node:nth-child(even) { align-self: flex-end; margin-right: 16px; }
+    .land-circle {
+      width: 82px; height: 82px; border-radius: 50%; border: 4px solid var(--navy);
+      background: #dcfce7; display: flex; align-items: center; justify-content: center;
+      font-size: 40px; box-shadow: 0 5px 0 var(--navy); cursor: pointer;
+      position: relative; transition: transform 0.1s;
+    }
+    .land-circle:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--navy); }
+    .land-circle.locked { background: #cbd5e1; cursor: not-allowed; opacity: 0.85; }
+    .land-badge-char {
+      position: absolute; top: -16px; right: -14px; font-size: 28px; background: #fff;
+      border: 2px solid var(--navy); border-radius: 50%; width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center; animation: bounce 1.4s infinite;
+    }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    .land-label {
+      margin-top: 8px; background: #ffffff; border: 2.5px solid var(--navy);
+      border-radius: 14px; padding: 6px 12px; font-weight: 900; font-size: 15px;
+      text-align: center; box-shadow: 0 3px 0 var(--navy);
+    }
+    .land-status { margin-top: 4px; font-size: 13px; font-weight: 800; color: #d97706; }
+    .land-status.locked-txt { color: #64748b; }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: sticky; bottom: 0; background: #ffffff; border-top: 3px solid var(--navy);
+      display: flex; justify-content: space-around; padding: 8px 4px; z-index: 20;
+    }
+    .nav-item {
+      background: none; border: none; display: flex; flex-direction: column;
+      align-items: center; gap: 2px; font-size: 12px; font-weight: 800;
+      color: #64748b; cursor: pointer; padding: 4px 8px; border-radius: 12px;
+    }
+    .nav-item.active { background: #fef3c7; color: var(--navy); }
+    .nav-item span.ico { font-size: 22px; }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65);
+      display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: var(--cream); border: 3.5px solid var(--navy); border-radius: 24px;
+      padding: 20px; width: 100%; max-width: 420px; box-shadow: 0 8px 0 var(--navy);
+      text-align: center; max-height: 90vh; overflow-y: auto;
+    }
+    .diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0; }
+    .diff-card {
+      border: 3px solid var(--navy); border-radius: 16px; padding: 12px 6px;
+      cursor: pointer; box-shadow: 0 4px 0 var(--navy); transition: transform 0.08s;
+    }
+    .diff-card:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--navy); }
+    .diff-easy { background: #dcfce7; }
+    .diff-med { background: #fef08a; }
+    .diff-hard { background: #fecdd3; }
+    .diff-card h4 { margin: 0 0 4px; font-size: 17px; font-weight: 900; }
+    .diff-card p { margin: 2px 0; font-size: 12px; font-weight: 700; }
+
+    /* Quiz Screen */
+    .quiz-subbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 14px; background: rgba(255,255,255,0.75);
+      border-bottom: 2px solid rgba(35,31,66,0.15);
+    }
+    .hearts { font-size: 18px; letter-spacing: 2px; }
+    .progress-segments { display: flex; gap: 5px; padding: 10px 16px 4px; }
+    .seg { flex: 1; height: 8px; border-radius: 99px; background: #ffffff; border: 2px solid var(--navy); }
+    .seg.done { background: #22c55e; }
+    .seg.current { background: var(--gold); }
+    .seg.wrong { background: #ef4444; }
+
+    .question-card {
+      background: var(--cream); border: 3.5px solid var(--navy); border-radius: 22px;
+      padding: 16px; margin: 10px 14px; box-shadow: var(--card-shadow);
+    }
+    .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .q-type { font-size: 12px; font-weight: 900; color: #64748b; letter-spacing: 0.5px; }
+    .q-badge {
+      font-size: 12px; font-weight: 900; padding: 3px 10px;
+      border-radius: 99px; border: 2px solid var(--navy); background: #fef08a;
+    }
+    .q-text { font-size: 20px; font-weight: 800; line-height: 1.5; margin-bottom: 14px; }
+
+    /* Fraction formatting */
+    .frac {
+      display: inline-flex; flex-direction: column; align-items: center;
+      vertical-align: middle; margin: 0 3px; font-size: 0.88em; line-height: 1.05;
+    }
+    .frac > span:first-child { border-bottom: 2px solid currentColor; padding: 0 3px 1px; }
+    .frac > span:last-child { padding: 1px 3px 0; }
+
+    /* Options */
+    .options-list { display: flex; flex-direction: column; gap: 10px; }
+    .opt-btn {
+      display: flex; align-items: center; gap: 12px; background: #ffffff;
+      border: 3px solid var(--navy); border-radius: 16px; padding: 11px 14px;
+      font-size: 18px; font-weight: 800; cursor: pointer; text-align: left;
+      box-shadow: 0 3px 0 var(--navy); transition: all 0.1s;
+    }
+    .opt-btn.selected { background: #fef3c7; border-color: #d97706; transform: translateY(-1px); }
+    .opt-btn.correct { background: var(--green-bg); border-color: var(--green); }
+    .opt-btn.incorrect { background: var(--red-bg); border-color: var(--red); }
+    .opt-btn.eliminated { opacity: 0.35; pointer-events: none; }
+    .opt-letter {
+      width: 32px; height: 32px; border-radius: 10px; background: var(--gold);
+      border: 2px solid var(--navy); display: flex; align-items: center;
+      justify-content: center; font-weight: 900; font-size: 16px; flex-shrink: 0;
+    }
+
+    /* Fill-in Input */
+    .fill-display {
+      width: 100%; min-height: 54px; background: #ffffff; border: 3px solid #3b82f6;
+      border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 900; padding: 8px; margin-bottom: 6px;
+    }
+    .fill-preview {
+      text-align: center; font-size: 16px; font-weight: 800;
+      color: #475569; margin-bottom: 10px; min-height: 28px;
+    }
+    .keypad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
+    .key-btn {
+      background: #ffffff; border: 2.5px solid var(--navy); border-radius: 12px;
+      padding: 10px 4px; font-size: 18px; font-weight: 900;
+      box-shadow: 0 3px 0 var(--navy); cursor: pointer;
+    }
+    .key-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--navy); }
+
+    /* Power-ups bar */
+    .powerups-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 4px 14px 12px; }
+    .pu-btn {
+      background: #ffffff; border: 2.5px solid var(--navy); border-radius: 14px;
+      padding: 8px 4px; display: flex; flex-direction: column; align-items: center;
+      gap: 2px; font-size: 12px; font-weight: 800; box-shadow: 0 3px 0 var(--navy); cursor: pointer;
+    }
+    .pu-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .pu-ico { font-size: 20px; }
+    .pu-sub { font-size: 11px; color: #4f46e5; }
+
+    /* Hint Box (3 levels) */
+    .hint-box {
+      margin: 0 14px 12px; background: #eff6ff; border: 3px solid #2563eb;
+      border-radius: 16px; padding: 12px 14px; font-size: 15px; font-weight: 700; display: none;
+    }
+    .hint-box.show { display: block; }
+    .hint-step { padding: 6px 0; border-bottom: 1px dashed #93c5fd; }
+    .hint-step:last-child { border-bottom: none; }
+
+    /* Explanation Panel */
+    .result-panel {
+      margin: 0 14px 20px; border: 3.5px solid var(--navy); border-radius: 20px;
+      padding: 16px; box-shadow: var(--card-shadow); display: none;
+    }
+    .result-panel.show { display: block; }
+    .result-panel.ok { background: #dcfce7; }
+    .result-panel.bad { background: #fee2e2; }
+    .res-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .res-title { font-size: 22px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+    .res-rewards { display: flex; gap: 6px; }
+    .rew-pill {
+      background: #ffffff; border: 2px solid var(--navy); border-radius: 99px;
+      padding: 3px 9px; font-size: 13px; font-weight: 900;
+    }
+    .res-card {
+      background: #ffffff; border: 2.5px solid var(--navy); border-radius: 14px;
+      padding: 10px 12px; margin-bottom: 10px; font-size: 16px; font-weight: 700; line-height: 1.5;
+    }
+    .mistake-card {
+      background: #fffbeb; border: 2.5px solid #d97706; border-radius: 14px;
+      padding: 10px 12px; margin-bottom: 12px; font-size: 15px; font-weight: 700; color: #92400e;
+    }
+
+    /* Sub-tabs content */
+    .tab-page { padding: 16px 16px 90px; display: none; flex-direction: column; gap: 12px; }
+    .tab-page.active { display: flex; }
+    .card-box {
+      background: var(--cream); border: 3px solid var(--navy); border-radius: 18px;
+      padding: 14px; box-shadow: 0 4px 0 var(--navy);
+    }
+    .badge-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .badge-item {
+      background: #ffffff; border: 2.5px solid var(--navy); border-radius: 16px;
+      padding: 12px; text-align: center; opacity: 0.45;
+    }
+    .badge-item.unlocked { opacity: 1; background: #fef9c3; }
+    .input-field {
+      width: 100%; padding: 12px; border: 3px solid var(--navy); border-radius: 14px;
+      font-size: 16px; font-weight: 800; margin: 6px 0 12px;
+    }
+    .avatar-picker { display: flex; justify-content: center; gap: 12px; margin: 10px 0 16px; }
+    .av-opt {
+      width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--navy);
+      font-size: 30px; background: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .av-opt.selected { background: var(--gold); transform: scale(1.1); }
+
+    /* ==================== TEACHER DASHBOARD (TRANG KẾT QUẢ) ==================== */
+    .td-topbar {
+      background: #ffffff; border-bottom: 2px solid #cbd5e1;
+      padding: 12px 16px; display: flex; flex-wrap: wrap;
+      align-items: center; justify-content: space-between; gap: 10px;
+      position: sticky; top: 0; z-index: 30;
+    }
+    .td-title-group { display: flex; align-items: center; gap: 10px; }
+    .td-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .td-select {
+      padding: 8px 12px; border: 2px solid #0f5c52; border-radius: 12px;
+      font-weight: 800; font-size: 14px; background: #ffffff; color: var(--teal);
+      cursor: pointer;
+    }
+    .td-body { padding: 18px 16px 40px; display: flex; flex-direction: column; gap: 18px; }
+
+    /* KPI Summary Cards (như ảnh 2) */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .kpi-card {
+      background: var(--teal-light); border-top: 4px solid var(--teal);
+      border-radius: 14px; padding: 14px 16px;
+    }
+    .kpi-big { font-size: 28px; font-weight: 900; color: var(--teal); line-height: 1.1; }
+    .kpi-big small { font-size: 16px; font-weight: 800; }
+    .kpi-sub { font-size: 13px; font-weight: 700; color: #334155; margin-top: 6px; }
+
+    /* Class breakdown cards */
+    .class-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .class-stat-card {
+      background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px;
+      padding: 12px 16px; display: flex; align-items: center; gap: 14px;
+    }
+    .class-badge { font-size: 22px; font-weight: 900; color: var(--teal); min-width: 52px; }
+    .class-bar-wrap { flex: 1; }
+    .class-bar-bg {
+      height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-top: 6px;
+    }
+    .class-bar-fill { height: 100%; background: var(--teal); border-radius: 99px; transition: width 0.4s; }
+
+    /* Section boxes */
+    .td-card {
+      background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 16px;
+      overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,0.04);
+    }
+    .td-card-head {
+      padding: 12px 16px; background: #ffffff; border-bottom: 1.5px solid #e2e8f0;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 900; font-size: 16px; color: #0f172a;
+    }
+    .td-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .td-table th {
+      background: var(--teal-light); color: var(--teal); text-align: left;
+      padding: 10px 14px; font-weight: 900; font-size: 12px; letter-spacing: 0.4px;
+    }
+    .td-table td {
+      padding: 11px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; font-weight: 700;
+    }
+    .td-table tr:last-child td { border-bottom: none; }
+
+    /* Student support pills (như ảnh 1) */
+    .pill-student {
+      display: inline-block; background: #fef3c7; color: #92400e;
+      border: 1px solid #fcd34d; border-radius: 8px; padding: 3px 9px;
+      font-size: 13px; font-weight: 800; margin: 2px 4px 2px 0;
+    }
+    .pill-weak {
+      display: inline-block; background: #fee2e2; color: #b91c1c;
+      border-radius: 8px; padding: 3px 8px; font-size: 12px; font-weight: 800;
+    }
+    .pill-good {
+      display: inline-block; background: #dcfce7; color: #15803d;
+      border-radius: 8px; padding: 3px 8px; font-size: 12px; font-weight: 800;
+    }
+
+    /* Bar chart tỉ lệ làm sai (như ảnh 2) */
+    .chart-row { margin-bottom: 14px; }
+    .chart-label { font-size: 14px; font-weight: 800; color: #1e293b; margin-bottom: 5px; }
+    .chart-track {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .chart-bar-bg {
+      flex: 1; height: 16px; background: #f1f5f9; border-radius: 6px; overflow: hidden;
+    }
+    .chart-bar-val {
+      height: 100%; background: #c24136; border-radius: 6px; transition: width 0.5s ease;
+    }
+    .chart-bar-val.teal { background: var(--teal); }
+    .chart-pct { font-size: 14px; font-weight: 900; min-width: 42px; color: #0f172a; }
+
+    /* Sub-tabs inside Teacher Dashboard */
+    .td-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .td-tab-btn {
+      padding: 8px 14px; border-radius: 12px; border: 2px solid #cbd5e1;
+      background: #ffffff; font-weight: 800; font-size: 14px; cursor: pointer; color: #475569;
+    }
+    .td-tab-btn.active {
+      background: var(--teal); color: #ffffff; border-color: var(--teal);
+    }
+
+    /* ===== Dạng ghép cặp / sắp xếp / trục số ===== */
+    #match-area, #order-area, #numline-area { margin-top: 4px; }
+    .sp-hint { font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 10px; }
+    .mt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
+    .mt-col { display: flex; flex-direction: column; gap: 8px; }
+    .mt-item {
+      display: flex; align-items: center; gap: 8px; text-align: left;
+      border: 3px solid var(--navy); border-radius: 14px; background: #fff;
+      padding: 10px 10px; min-height: 52px; font-size: 17px; font-weight: 800; color: var(--navy);
+      box-shadow: 0 3px 0 var(--navy); cursor: pointer; width: 100%;
+    }
+    .mt-item.sel { background: #fef3c7; border-color: #d97706; transform: translateY(-1px); }
+    .mt-item.paired { background: #fff; border-color: var(--pc); box-shadow: 0 3px 0 var(--pc); }
+    .mt-item.ok { background: var(--green-bg); border-color: var(--green); box-shadow: 0 3px 0 var(--green); }
+    .mt-item.bad { background: var(--red-bg); border-color: var(--red); box-shadow: 0 3px 0 var(--red); }
+    .mt-item:disabled { cursor: default; }
+    .mt-num {
+      flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%;
+      border: 2px solid var(--navy); background: var(--pc, #e2e8f0); color: #fff;
+      display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900;
+    }
+    .mt-num.empty { background: #e2e8f0; color: transparent; }
+    .od-label { font-size: 13px; font-weight: 800; color: #475569; margin: 6px 0; }
+    .od-slots { display: flex; flex-direction: column; gap: 8px; }
+    .od-slot {
+      display: flex; align-items: center; gap: 8px; min-height: 48px; text-align: left;
+      border: 3px dashed #94a3b8; border-radius: 14px; background: #f8fafc;
+      padding: 8px 10px; font-size: 17px; font-weight: 800; color: var(--navy); width: 100%;
+    }
+    .od-slot.filled { border-style: solid; border-color: var(--navy); background: #fff; box-shadow: 0 3px 0 var(--navy); cursor: pointer; }
+    .od-slot.filled.ok { background: var(--green-bg); border-color: var(--green); box-shadow: 0 3px 0 var(--green); }
+    .od-slot.filled.bad { background: var(--red-bg); border-color: var(--red); box-shadow: 0 3px 0 var(--red); }
+    .od-n {
+      flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; background: var(--gold);
+      border: 2px solid var(--navy); display: inline-flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 900; color: var(--navy);
+    }
+    .od-pool { display: flex; flex-wrap: wrap; gap: 8px; }
+    .od-chip {
+      border: 3px solid var(--navy); border-radius: 14px; background: #fff; padding: 9px 12px;
+      font-size: 17px; font-weight: 800; color: var(--navy); box-shadow: 0 3px 0 var(--navy); cursor: pointer; text-align: left;
+    }
+    .od-chip:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--navy); }
+    .od-chip.used { opacity: 0.3; pointer-events: none; }
+    .od-chip:disabled { cursor: default; }
+    .nl-svg { width: 100%; height: auto; display: block; background: #f8fafc; border: 3px solid var(--navy); border-radius: 14px; }
+    .nl-svg text { font-family: 'Nunito', sans-serif; font-weight: 800; fill: #231f42; }
+    .nl-read { text-align: center; font-size: 17px; font-weight: 800; margin-top: 8px; min-height: 28px; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+
+  <!-- ==================== SCREEN 1: HOME ==================== -->
+  <section id="screen-home" class="screen home-wrap active">
+    <svg class="q-logo" viewBox="0 0 100 100">
+      <circle cx="48" cy="46" r="32" fill="#ffffff" stroke="#231f42" stroke-width="6"/>
+      <ellipse cx="48" cy="46" rx="18" ry="26" fill="#bae6fd" stroke="#231f42" stroke-width="5"/>
+      <line x1="48" y1="16" x2="48" y2="76" stroke="#231f42" stroke-width="5"/>
+      <path d="M62 66 L82 84 L72 90 L54 72 Z" fill="#ffffff" stroke="#231f42" stroke-width="5" stroke-linejoin="round"/>
+    </svg>
+
+    <h1 class="game-title">Vương Quốc<span>Realia</span></h1>
+    <div class="subtitle">Hành trình Hiệp sĩ Toán học • Chương II: Số thực (Toán 7 KNTT)</div>
+
+    <div class="teacher-card">
+      <div>Giáo viên: <span id="disp-teacher">Trần Thị Thu Chẳng</span></div>
+      <div id="disp-school">Trường THCS Nam Đàn</div>
+    </div>
+
+    <div class="lands-preview">
+      <span>🏡</span><span>🏰</span><span>🌲</span><span>⛰️</span><span>🏯</span>
+    </div>
+
+    <button id="btn-continue" class="btn btn-gold" style="display:none;" onclick="continueGame()">
+      ▶ Chơi tiếp: <span id="cont-name">Minh</span>
+    </button>
+
+    <button class="btn" onclick="openNewCharModal()">
+      Tạo nhân vật mới
+    </button>
+
+    <div class="audio-controls">
+      <button id="btn-sfx" class="btn btn-sm" onclick="toggleSfx()">🔊 Âm thanh: bật</button>
+      <button id="btn-bgm" class="btn btn-sm" onclick="toggleBgm()">🎵 Nhạc nền: tắt</button>
+    </div>
+
+    <button class="teacher-link" onclick="openTeacherDashboard()">Dành cho giáo viên →</button>
+  </section>
+
+  <!-- ==================== SCREEN 2: MAIN HUB (MAP / SHOP / BADGES / PROFILE) ==================== -->
+  <section id="screen-hub" class="screen" style="padding:0;">
+    <div class="hud">
+      <div class="hud-left">
+        <div class="avatar-circle" id="hud-avatar">🐶</div>
+        <div class="hud-info">
+          <div class="hud-name-row">
+            <span id="hud-name">Minh</span>
+            <span class="hud-lvl" id="hud-lvl">Cấp 1</span>
+          </div>
+          <div class="xp-bar"><div class="xp-fill" id="hud-xp-fill"></div></div>
+          <div class="xp-text" id="hud-xp-text">0/100 XP</div>
+        </div>
+      </div>
+      <div class="coin-pill">🪙 <span id="hud-coins">50</span></div>
+      <button class="icon-btn" id="hud-sound-btn" onclick="toggleSfx()">🔊</button>
+    </div>
+
+    <div id="tab-map" class="map-container"></div>
+
+    <div id="tab-shop" class="tab-page">
+      <h2 style="margin:0; font-size:22px; font-weight:900;">🛒 Cửa Hàng Hiệp Sĩ</h2>
+      <p style="margin:0; font-size:14px; font-weight:700; color:#475569;">Dùng vàng kiếm được qua các ải để trang bị vật phẩm hỗ trợ!</p>
+      <div class="card-box" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:900; font-size:17px;">📜 Cuộn Gợi Ý (+1)</div>
+          <div style="font-size:13px; color:#475569;">Mở thêm gợi ý chi tiết từng bước</div>
+        </div>
+        <button class="btn btn-gold btn-sm" onclick="buyItem('hints', 20)">🪙 20</button>
+      </div>
+      <div class="card-box" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:900; font-size:17px;">✂️ Kéo 50:50 (+1)</div>
+          <div style="font-size:13px; color:#475569;">Loại bỏ bớt phương án sai</div>
+        </div>
+        <button class="btn btn-gold btn-sm" onclick="buyItem('fifty', 25)">🪙 25</button>
+      </div>
+      <div class="card-box" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:900; font-size:17px;">👟 Giày Bỏ Qua (+1)</div>
+          <div style="font-size:13px; color:#475569;">Vượt qua câu khó mà không mất tim</div>
+        </div>
+        <button class="btn btn-gold btn-sm" onclick="buyItem('skip', 35)">🪙 35</button>
+      </div>
+      <div class="card-box" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:900; font-size:17px;">🧪 Bình Hồi Máu (+1)</div>
+          <div style="font-size:13px; color:#475569;">Hồi phục 1 trái tim khi đang chiến đấu</div>
+        </div>
+        <button class="btn btn-gold btn-sm" onclick="buyItem('heal', 30)">🪙 30</button>
+      </div>
+    </div>
+
+    <div id="tab-badges" class="tab-page">
+      <h2 style="margin:0; font-size:22px; font-weight:900;">🏅 Bộ Sưu Tập Huy Hiệu</h2>
+      <div class="badge-grid" id="badges-list"></div>
+    </div>
+
+    <div id="tab-review" class="tab-page">
+      <h2 style="margin:0; font-size:22px; font-weight:900;">🕯️ Cẩm Nang Kiến Thức</h2>
+      <div class="card-box">
+        <h4 style="margin:0 0 6px;">1. So sánh số hữu tỉ</h4>
+        <div style="font-size:14px; line-height:1.5;">Viết hai số dưới dạng phân số cùng mẫu dương rồi so sánh tử số. Số hữu tỉ âm luôn nhỏ hơn 0 và nhỏ hơn số hữu tỉ dương.</div>
+      </div>
+      <div class="card-box">
+        <h4 style="margin:0 0 6px;">2. Quy tắc dấu ngoặc</h4>
+        <div style="font-size:14px; line-height:1.5;">• Trước ngoặc dấu <b>"+"</b>: giữ nguyên dấu các số hạng.<br>• Trước ngoặc dấu <b>"-"</b>: đổi dấu tất cả số hạng bên trong.</div>
+      </div>
+      <div class="card-box">
+        <h4 style="margin:0 0 6px;">3. Thứ tự phép tính & Chuyển vế</h4>
+        <div style="font-size:14px; line-height:1.5;">• Lũy thừa → Nhân, chia → Cộng, trừ.<br>• Khi chuyển một số hạng từ vế này sang vế kia, ta phải <b>đổi dấu</b> số hạng đó.</div>
+      </div>
+    </div>
+
+    <div id="tab-profile" class="tab-page">
+      <h2 style="margin:0; font-size:22px; font-weight:900;">👤 Hồ Sơ Hiệp Sĩ</h2>
+      <div class="card-box">
+        <div style="font-size:16px; font-weight:800; margin-bottom:6px;">Học sinh: <span id="prof-name">Minh</span> • Lớp: <span id="prof-class">7A</span></div>
+        <div style="font-size:15px; font-weight:700; color:#475569;">Tổng sao đạt được: <b id="prof-stars">0</b> ⭐</div>
+        <div style="font-size:15px; font-weight:700; color:#475569;">Số câu trả lời đúng: <b id="prof-correct">0</b> câu</div>
+        <hr style="border:1px dashed #cbd5e1; margin:12px 0;">
+        <p style="font-size:14px; font-weight:700; margin:0 0 10px;">Khi hoàn thành các vùng đất (hoặc muốn báo cáo tiến độ), hãy bấm nút bên dưới để gửi điểm về cho Thầy/Cô:</p>
+        <button class="btn btn-green" id="btn-submit-sheet" onclick="submitResultsToSheet(false)">📤 Nộp kết quả cho Giáo viên</button>
+        <div id="submit-status" style="margin-top:8px; font-size:14px; font-weight:800; text-align:center;"></div>
+      </div>
+      <button class="btn" onclick="goHome()">🏠 Về màn hình chính</button>
+    </div>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="switchTab('map', this)"><span class="ico">🗺️</span>Bản đồ</button>
+      <button class="nav-item" onclick="switchTab('shop', this)"><span class="ico">🛒</span>Cửa hàng</button>
+      <button class="nav-item" onclick="switchTab('badges', this)"><span class="ico">🏅</span>Huy hiệu</button>
+      <button class="nav-item" onclick="switchTab('review', this)"><span class="ico">🕯️</span>Ôn tập</button>
+      <button class="nav-item" onclick="switchTab('profile', this)"><span class="ico">👤</span>Hồ sơ</button>
+    </nav>
+  </section>
+
+  <!-- ==================== SCREEN 3: QUIZ STAGE ==================== -->
+  <section id="screen-quiz" class="screen" style="padding:0;">
+    <div class="hud">
+      <div class="hud-left">
+        <div class="avatar-circle" id="q-hud-avatar">🐶</div>
+        <div class="hud-info">
+          <div class="hud-name-row">
+            <span id="q-hud-name">Minh</span>
+            <span class="hud-lvl" id="q-hud-lvl">Cấp 1</span>
+          </div>
+          <div class="xp-bar"><div class="xp-fill" id="q-hud-xp-fill"></div></div>
+          <div class="xp-text" id="q-hud-xp-text">0/100 XP</div>
+        </div>
+      </div>
+      <div class="coin-pill">🪙 <span id="q-hud-coins">50</span></div>
+      <button class="icon-btn" onclick="toggleSfx()">🔊</button>
+    </div>
+
+    <div class="quiz-subbar">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="icon-btn" style="width:34px; height:34px; border-radius:10px;" onclick="exitStage()">✕</button>
+        <span style="font-weight:900; font-size:15px;" id="stage-title-bar">Làng Tập Hợp ℚ • Thường</span>
+      </div>
+      <div class="hearts" id="hearts-display">❤️❤️❤️❤️❤️</div>
+    </div>
+
+    <div class="progress-segments" id="progress-segments"></div>
+
+    <div class="question-card">
+      <div class="q-header">
+        <span class="q-type" id="q-type-label">TRẮC NGHIỆM</span>
+        <span class="q-badge" id="q-diff-badge">THƯỜNG</span>
+      </div>
+      <div class="q-text" id="q-text">Nội dung câu hỏi</div>
+
+      <div id="mc-area" class="options-list"></div>
+      <div id="match-area" style="display:none;"></div>
+      <div id="order-area" style="display:none;"></div>
+      <div id="numline-area" style="display:none;"></div>
+
+      <div id="fill-area" style="display:none;">
+        <div class="fill-display" id="fill-input-box"></div>
+        <div class="fill-preview" id="fill-preview-box">Em viết: </div>
+        <div class="keypad">
+          <button class="key-btn" onclick="pressKey('1')">1</button>
+          <button class="key-btn" onclick="pressKey('2')">2</button>
+          <button class="key-btn" onclick="pressKey('3')">3</button>
+          <button class="key-btn" onclick="pressKey('4')">4</button>
+          <button class="key-btn" onclick="pressKey('5')">5</button>
+          <button class="key-btn" onclick="pressKey('6')">6</button>
+          <button class="key-btn" onclick="pressKey('7')">7</button>
+          <button class="key-btn" onclick="pressKey('8')">8</button>
+          <button class="key-btn" onclick="pressKey('9')">9</button>
+          <button class="key-btn" onclick="pressKey('0')">0</button>
+          <button class="key-btn" onclick="pressKey('-')">−</button>
+          <button class="key-btn" onclick="pressKey('/')">/</button>
+          <button class="key-btn" onclick="pressKey(',')">,</button>
+          <button class="key-btn" style="grid-column: span 2; background:#fee2e2;" onclick="pressKey('BACK')">⌫ Xóa</button>
+        </div>
+      </div>
+
+      <button id="btn-check-answer" class="btn btn-gold" style="margin-top:14px;" onclick="checkAnswer()" disabled>
+        Kiểm tra
+      </button>
+    </div>
+
+    <div class="powerups-grid">
+      <button class="pu-btn" id="pu-hint" onclick="useHint()">
+        <span class="pu-ico">📜</span>
+        <span>Gợi ý (<span id="hint-level-txt">0/3</span>)</span>
+        <span class="pu-sub" id="pu-hint-count">2 miễn phí</span>
+      </button>
+      <button class="pu-btn" id="pu-fifty" onclick="useFiftyFifty()">
+        <span class="pu-ico">✂️</span>
+        <span>50:50</span>
+        <span class="pu-sub" id="pu-fifty-count">1</span>
+      </button>
+      <button class="pu-btn" id="pu-skip" onclick="useSkip()">
+        <span class="pu-ico">👟</span>
+        <span>Bỏ qua</span>
+        <span class="pu-sub" id="pu-skip-count">0</span>
+      </button>
+      <button class="pu-btn" id="pu-heal" onclick="useHeal()">
+        <span class="pu-ico">🧪</span>
+        <span>Hồi máu</span>
+        <span class="pu-sub" id="pu-heal-count">1</span>
+      </button>
+    </div>
+
+    <div id="hint-box" class="hint-box"></div>
+
+    <div id="result-panel" class="result-panel">
+      <div class="res-header">
+        <div class="res-title" id="res-title">✅ Tuyệt vời!</div>
+        <div class="res-rewards" id="res-rewards"></div>
+      </div>
+      <div class="res-card" id="res-correct-ans"></div>
+      <div class="res-card" id="res-explanation"></div>
+      <div class="mistake-card" id="res-mistake" style="display:none;"></div>
+      <button class="btn btn-gold" onclick="nextQuestion()">Tiếp tục ▶</button>
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 4: TEACHER DASHBOARD (TRANG KẾT QUẢ) ==================== -->
+  <section id="screen-teacher" class="screen" style="padding:0; background:#f8fafc;">
+    <div class="td-topbar">
+      <div class="td-title-group">
+        <button class="icon-btn" style="border-radius:12px;" onclick="exitTeacherDashboard()">←</button>
+        <div>
+          <div style="font-size:18px; font-weight:900; color:#0f172a;">📊 Trang Kết Quả Giáo Viên</div>
+          <div style="font-size:12px; font-weight:700; color:#64748b;" id="td-subtitle">Giáo viên: Trần Thị Thu Chẳng • Trường THCS Nam Đàn</div>
+        </div>
+      </div>
+
+      <div class="td-controls">
+        <select id="td-class-filter" class="td-select" onchange="renderTeacherDashboard()">
+          <option value="ALL">Lớp: Tất cả các lớp</option>
+        </select>
+        <button class="btn btn-teal btn-sm" id="btn-fetch-results" onclick="fetchTeacherResults()">
+          📥 Tải kết quả
+        </button>
+        <button class="btn btn-sm" onclick="openTeacherSettingsModal()">⚙️ Cài đặt</button>
+      </div>
+    </div>
+
+    <div class="td-body">
+      <div id="td-sync-banner" style="font-size:13px; font-weight:800; color:#0f5c52; background:#e6f2f0; padding:8px 14px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
+        <span id="td-sync-msg">Đang hiển thị dữ liệu kết quả học sinh...</span>
+        <span id="td-last-update" style="font-size:12px; color:#475569;"></span>
+      </div>
+
+      <!-- KPI Cards (như ảnh 2) -->
+      <div class="kpi-grid" id="td-kpi-grid"></div>
+
+      <!-- Thống kê theo từng lớp (như ảnh 2) -->
+      <div id="td-class-breakdown" class="class-grid"></div>
+
+      <!-- Tabs chuyển đổi 4 góc nhìn phân tích (như ảnh 1 & 2) -->
+      <div class="td-tabs">
+        <button class="td-tab-btn active" onclick="switchTdTab('support', this)">3. Dạng cả lớp sai nhiều nhất</button>
+        <button class="td-tab-btn" onclick="switchTdTab('ranking', this)">1. Bảng xếp hạng</button>
+        <button class="td-tab-btn" onclick="switchTdTab('weakness', this)">2. Dạng yếu nhất của từng người</button>
+        <button class="td-tab-btn" onclick="switchTdTab('chart', this)">📈 Tỉ lệ làm sai theo dạng bài</button>
+      </div>
+
+      <!-- VIEW 3: DẠNG CẢ LỚP SAI NHIỀU NHẤT + TÊN HỌC SINH CẦN HỖ TRỢ (GIỐNG HỆT ẢNH 1) -->
+      <div id="td-view-support" class="td-card">
+        <div class="td-card-head">
+          <span>Trang giáo viên • Dạng bài cần hỗ trợ trước tiết ôn tập</span>
+          <span style="font-size:13px; color:#0f5c52;" id="td-badge-class">Lớp: Tất cả</span>
+        </div>
+        <table class="td-table">
+          <thead>
+            <tr>
+              <th style="width:36%;">DẠNG BÀI</th>
+              <th>CẦN HỖ TRỢ</th>
+            </tr>
+          </thead>
+          <tbody id="td-support-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- VIEW 1: BẢNG XẾP HẠNG (Tên, cấp độ, số sao của từng người chơi) -->
+      <div id="td-view-ranking" class="td-card" style="display:none;">
+        <div class="td-card-head">
+          <span>🏆 Bảng xếp hạng hiệp sĩ</span>
+          <span style="font-size:13px; color:#64748b;" id="td-rank-count">0 học sinh</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="td-table">
+            <thead>
+              <tr>
+                <th>HẠNG</th>
+                <th>HỌ VÀ TÊN</th>
+                <th>LỚP</th>
+                <th>CẤP ĐỘ</th>
+                <th>SỐ SAO</th>
+                <th>CÂU ĐÚNG</th>
+              </tr>
+            </thead>
+            <tbody id="td-ranking-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW 2: DẠNG YẾU NHẤT CỦA TỪNG NGƯỜI (Trong các dạng bài Toán 7) -->
+      <div id="td-view-weakness" class="td-card" style="display:none;">
+        <div class="td-card-head">
+          <span>🎯 Dạng yếu nhất của từng học sinh</span>
+          <span style="font-size:13px; color:#64748b;">Phân tích chi tiết 14 dạng bài Toán 7</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="td-table">
+            <thead>
+              <tr>
+                <th>HỌC SINH</th>
+                <th>LỚP</th>
+                <th>DẠNG YẾU NHẤT CẦN ÔN</th>
+                <th>TỈ LỆ SAI Ở DẠNG NÀY</th>
+              </tr>
+            </thead>
+            <tbody id="td-weakness-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW 4: BIỂU ĐỒ TỈ LỆ LÀM SAI THEO DẠNG BÀI (GIỐNG ẢNH 2) -->
+      <div id="td-view-chart" class="td-card" style="display:none;">
+        <div class="td-card-head">
+          <span>📊 Tỉ lệ làm sai theo dạng bài (% câu làm sai)</span>
+          <span style="font-size:13px; color:#c24136;" id="td-chart-class-lbl">Tất cả lớp</span>
+        </div>
+        <div style="padding:16px;" id="td-chart-container"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+<div id="modal-newchar" class="modal-backdrop">
+  <div class="modal-box">
+    <h2 style="margin:0 0 8px; font-weight:900;">Tạo Hiệp Sĩ Mới</h2>
+    <p style="margin:0 0 12px; font-size:14px; font-weight:700; color:#475569;">Chọn linh vật đồng hành và nhập tên của em</p>
+    <div class="avatar-picker" id="avatar-picker">
+      <button type="button" class="av-opt selected" data-av="🐶" onclick="selectAvatar(this)">🐶</button>
+      <button type="button" class="av-opt" data-av="🐱" onclick="selectAvatar(this)">🐱</button>
+      <button type="button" class="av-opt" data-av="🦊" onclick="selectAvatar(this)">🦊</button>
+      <button type="button" class="av-opt" data-av="🐼" onclick="selectAvatar(this)">🐼</button>
+    </div>
+    <input type="text" id="inp-student-name" class="input-field" placeholder="Họ và tên học sinh (VD: Nguyễn Văn Minh)" />
+    <input type="text" id="inp-student-class" class="input-field" placeholder="Lớp (VD: 7A4)" />
+    <button class="btn btn-gold" onclick="createNewCharacter()">Bắt đầu hành trình 🚀</button>
+    <button class="btn" style="margin-top:8px;" onclick="closeModals()">Hủy</button>
+  </div>
+</div>
+
+<div id="modal-diff" class="modal-backdrop">
+  <div class="modal-box">
+    <h2 id="modal-land-title" style="margin:0 0 6px; font-size:24px; font-weight:900;">Làng Tập Hợp ℚ</h2>
+    <p id="modal-land-desc" style="margin:0 0 12px; font-size:15px; font-weight:700; color:#475569;">8 thử thách. Sai một câu mất một tim.</p>
+    <div style="font-weight:900; font-size:16px;">Chọn mức độ</div>
+    <div class="diff-grid">
+      <div class="diff-card diff-easy" onclick="startStage('easy')">
+        <h4>Dễ</h4>
+        <p>Làm quen</p>
+        <p style="color:#15803d; font-weight:900;">×1 thưởng</p>
+      </div>
+      <div class="diff-card diff-med" onclick="startStage('medium')">
+        <h4>Thường</h4>
+        <p>Vừa sức</p>
+        <p style="color:#b45309; font-weight:900;">×1.5 thưởng</p>
+      </div>
+      <div class="diff-card diff-hard" onclick="startStage('hard')">
+        <h4>Khó</h4>
+        <p>Thử thách</p>
+        <p style="color:#be123c; font-weight:900;">×2 thưởng</p>
+      </div>
+    </div>
+    <button class="btn" onclick="closeModals()">Để sau</button>
+  </div>
+</div>
+
+<!-- Modal: Cài đặt Giáo viên -->
+<div id="modal-teacher-settings" class="modal-backdrop">
+  <div class="modal-box">
+    <h2 style="margin:0 0 8px; font-weight:900;">⚙️ Cài Đặt Giáo Viên</h2>
+    <p style="margin:0 0 10px; font-size:13px; color:#475569;">Thông tin hiển thị ở trang đầu và đường link Google Apps Script (/exec) nhận/tải điểm:</p>
+    <input type="text" id="cfg-teacher" class="input-field" value="Trần Thị Thu Chẳng" placeholder="Tên giáo viên" />
+    <input type="text" id="cfg-school" class="input-field" value="Trường THCS Nam Đàn" placeholder="Tên trường" />
+    <input type="text" id="cfg-script" class="input-field" value="https://script.google.com/macros/s/AKfycbzwc4DlcbsVd3h03bEyT28xeOrvr8fmf0qjXmvIDC6erZsp-L9qI0Sm38s_Xi0fj9ITZA/exec" placeholder="Link Google Apps Script /exec" />
+    <button class="btn btn-gold" onclick="saveTeacherConfig()">Lưu cấu hình</button>
+    <button class="btn" style="margin-top:8px;" onclick="closeModals()">Đóng</button>
+  </div>
+</div>
+
+<script>
+// =========================================================================
+// 1. CẤU HÌNH MẶC ĐỊNH & ÂM THANH
+// =========================================================================
+const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0oMivE_Frrr-jfdi2MusJNz1LVADuIHFNsR0dKXm6hGU9ca-U9KCYllzPxFUmrBi6/exec";
+
+let teacherConfig = JSON.parse(localStorage.getItem('vqht_teacher_cfg')) || {
+  teacherName: "Trần Thị Thu Chẳng",
+  schoolName: "Trường THCS Nam Đàn",
+  scriptUrl: DEFAULT_SCRIPT_URL
+};
+
+let sfxEnabled = true;
+let bgmEnabled = false;
+let audioCtx = null;
+let bgmTimer = null;
+
+function initAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playTone(freq, duration, type = 'sine', vol = 0.12) {
+  if (!sfxEnabled) return;
+  initAudio();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + duration);
+}
+
+function playSoundEffect(kind) {
+  if (!sfxEnabled) return;
+  if (kind === 'click') playTone(520, 0.08, 'triangle', 0.1);
+  if (kind === 'correct') {
+    playTone(523.25, 0.12, 'sine', 0.15);
+    setTimeout(() => playTone(659.25, 0.12, 'sine', 0.15), 90);
+    setTimeout(() => playTone(783.99, 0.25, 'sine', 0.18), 180);
+  }
+  if (kind === 'wrong') {
+    playTone(240, 0.18, 'sawtooth', 0.12);
+    setTimeout(() => playTone(180, 0.28, 'sawtooth', 0.12), 140);
+  }
+  if (kind === 'win') {
+    [523, 659, 784, 1046].forEach((f, idx) => setTimeout(() => playTone(f, 0.2, 'triangle', 0.16), idx * 110));
+  }
+}
+
+function toggleSfx() {
+  sfxEnabled = !sfxEnabled;
+  document.getElementById('btn-sfx').textContent = sfxEnabled ? '🔊 Âm thanh: bật' : '🔇 Âm thanh: tắt';
+  document.getElementById('hud-sound-btn').textContent = sfxEnabled ? '🔊' : '🔇';
+  if (sfxEnabled) playSoundEffect('click');
+}
+
+function toggleBgm() {
+  bgmEnabled = !bgmEnabled;
+  document.getElementById('btn-bgm').textContent = bgmEnabled ? '🎵 Nhạc nền: bật' : '🎵 Nhạc nền: tắt';
+  if (bgmEnabled) {
+    initAudio();
+    const melody = [392, 440, 493.88, 523.25, 587.33, 523.25, 493.88, 440];
+    let step = 0;
+    bgmTimer = setInterval(() => {
+      if (!bgmEnabled) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(melody[step % melody.length], audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.38);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.4);
+      step++;
+    }, 450);
+  } else {
+    clearInterval(bgmTimer);
+  }
+}
+
+function F(num, den) {
+  return `<span class="frac"><span>${num}</span><span>${den}</span></span>`;
+}
+
+// =========================================================================
+// 2. NGÂN HÀNG CÂU HỎI TOÁN 7 (GẮN NHÃN DẠNG BÀI CHI TIẾT ĐỂ THỐNG KÊ)
+// =========================================================================
+const ALL_TOPICS_14 = [
+  "So sánh, sắp xếp",
+  "Biểu diễn trên trục số",
+  "Số đối của số hữu tỉ",
+  "Cộng, trừ số hữu tỉ",
+  "Nhân, chia số hữu tỉ",
+  "Tính chất phân phối",
+  "Quy tắc dấu ngoặc",
+  "Lũy thừa với số mũ tự nhiên",
+  "Nhân, chia lũy thừa cùng cơ số",
+  "Lũy thừa của lũy thừa",
+  "Thứ tự phép tính",
+  "Chuyển vế, tìm x",
+  "Tìm x chứa lũy thừa",
+  "Tính tổng quy luật"
+];
+
+const LANDS = [
+  {
+    "id": 0,
+    "name": "Ải 1: Thung lũng Thập Phân",
+    "topic": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+    "icon": "🏰",
+    "maxStars": 30,
+    "questions": [
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Trong các phân số sau, phân số nào viết được dưới dạng số thập phân hữu hạn?",
+        "options": [
+          "A. 1/3",
+          "B. 3/4",
+          "C. 5/6",
+          "D. 7/9"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Rút gọn các phân số về dạng tối giản với mẫu dương.\nBước 2: Phân tích mẫu số ra thừa số nguyên tố: Mẫu số 4 = 2^2 (chỉ có thừa số 2).\nBước 3: Theo quy tắc, phân số tối giản có mẫu không chứa thừa số nguyên tố nào khác 2 và 5 sẽ viết được dưới dạng số thập phân hữu hạn.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh dễ quên rút gọn phân số trước khi xét mẫu, hoặc nhầm lẫn giữa điều kiện số thập phân hữu hạn và vô hạn tuần hoàn."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Xác định tính Đúng (Đ) hoặc Sai (S) cho từng mệnh đề sau về số thập phân:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Phân số 2/5 viết được dưới dạng số thập phân hữu hạn.\nb) Phân số 1/6 viết được dưới dạng số thập phân hữu hạn.\nc) Chu kỳ của số 0,1232323... là 23.\nd) Số 0,45 là số thập phân vô hạn tuần hoàn.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG. Mẫu số 5 chỉ chứa thừa số 5, 2/5 = 0,4.\nb) SAI. Mẫu 6 = 2 x 3 (có thừa số 3 khác 2 và 5) nên 1/6 = 0,1666... là vô hạn tuần hoàn.\nc) ĐÚNG. Nhóm chữ số 23 lặp đi lặp lại vô hạn bắt đầu sau chữ số 1 nên chu kỳ là 23, viết là 0,1(23).\nd) SAI. Số 0,45 có hữu hạn chữ số sau dấu phẩy (2 chữ số) nên là số thập phân hữu hạn.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay nhầm lẫn số có nhiều chữ số sau dấu phẩy với số vô hạn tuần hoàn nếu không nhìn kỹ dấu gạch ngang chu kỳ hoặc dấu ba chấm."
+      },
+      {
+        "type": "fill",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Cho phân số 5/11. Hãy viết phân số này dưới dạng số thập phân và xác định chu kỳ của nó.",
+        "ansText": [
+          "0,(45) hoặc 0,4545...",
+          "Chu kỳ là 45."
+        ],
+        "ansDisplay": "0,(45) hoặc 0,4545... ; Chu kỳ là 45.",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Thực hiện phép chia 5 cho 11: 5 : 11 = 0,454545...\nBước 2: Nhận xét nhóm chữ số 45 lặp lại liên tục.\nBước 3: Viết gọn dưới dạng chu kỳ: 0,(45). Chu kỳ là 45.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay nhầm chu kỳ là 4 hoặc 54 do ghi sai thứ tự dư khi chia."
+      },
+      {
+        "type": "match",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Hãy nối phân số ở Cột A với số thập phân tương ứng ở Cột B:",
+        "left": [
+          "1) 3/5",
+          "2) 7/3",
+          "3) 1/4",
+          "4) 2/9"
+        ],
+        "right": [
+          "A) 0,25",
+          "B) 0,6",
+          "C) 0,(2)",
+          "D) 2,(3)"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nGhép đúng:\n• 1 - B (3/5 = 0,6)\n• 2 - D (7/3 = 2,333... = 2,(3))\n• 3 - A (1/4 = 0,25)\n• 4 - C (2/9 = 0,222... = 0,(2))",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh dễ thực hiện chia sai nhẩm khiến ghép sai cặp phân số và số thập phân."
+      },
+      {
+        "type": "match",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Phân loại các số thập phân sau vào 2 nhóm thích hợp: 0,15 ; 0,333... ; 2,75 ; -1,(6) ; 4,125 ; 0,121212...",
+        "left": [
+          "Mục 1",
+          "Mục 2",
+          "Mục 3",
+          "Mục 4"
+        ],
+        "right": [
+          "Đáp án 1",
+          "Đáp án 2",
+          "Đáp án 3",
+          "Đáp án 4"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Kiểm tra các số có phần thập phân dừng lại (hữu hạn chữ số) -> Xếp vào Nhóm 1.\nBước 2: Kiểm tra các số có dấu ba chấm hoặc mở đóng ngoặc chu kỳ -> Xếp vào Nhóm 2.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay xếp nhầm các số mang dấu âm như -1,(6) sang nhóm riêng do không chú ý quy tắc phân loại."
+      },
+      {
+        "type": "order",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Hãy sắp xếp các bước sau theo đúng thứ tự để làm tròn số 4,3561 đến hàng phần trăm:",
+        "items": [
+          "1. Bước A: Xác định chữ số hàng làm tròn là chữ số 5 (hàng phần trăm).",
+          "2. Bước B: Nhìn sang chữ số ngay bên phải hàng làm tròn là chữ số 6.",
+          "3. Bước C: Vì 6 >= 5 nên ta tăng chữ số hàng làm tròn lên 1 đơn vị (5 + 1 = 6).",
+          "4. Bước D: Bỏ các chữ số bên phải hàng làm tròn, thu được kết quả 4,36."
+        ],
+        "hints": [
+          "Mức 1: Tìm bước xuất phát đầu tiên của lời giải.",
+          "Mức 2: Sắp xếp các bước suy luận theo trình tự logic.",
+          "Mức 3: Chọn bước kết luận ở vị trí cuối cùng."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nThứ tự chuẩn: A -> B -> C -> D.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay quên quy tắc tăng 1 đơn vị khi chữ số ngay bên phải lớn hơn hoặc bằng 5, dẫn đến giữ nguyên 4,35."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Làm tròn số 12,345 đến hàng phần mười ta được kết quả là:",
+        "options": [
+          "A. 12,3",
+          "B. 12,4",
+          "C. 12,35",
+          "D. 12,0"
+        ],
+        "ans": 0,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Hàng phần mười là chữ số 3.\nBước 2: Chữ số ngay bên phải là 4 (< 5).\nBước 3: Giữ nguyên chữ số 3 và bỏ các chữ số phía sau.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay làm tròn nhầm sang hàng phần trăm (12,35) hoặc làm tròn tăng lên thành 12,4."
+      },
+      {
+        "type": "fill",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Ước lượng tích 19,8 × 4,1 bằng cách làm tròn các thừa số đến hàng đơn vị.",
+        "ansText": [
+          "80"
+        ],
+        "ansDisplay": "80",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Làm tròn 19,8 đến hàng đơn vị được 20 (vì chữ số bên phải là 8 >= 5).\nBước 2: Làm tròn 4,1 đến hàng đơn vị được 4 (vì chữ số bên phải là 1 < 5).\nBước 3: Tính tích ước lượng: 20 × 4 = 80.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh làm tròn sai 19,8 thành 19 dẫn đến tính ước lượng ra 76."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Xác định tính Đúng (Đ) hoặc Sai (S) cho các phép ước lượng kết quả sau:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) 49,5 + 50,2 ≈ 100\nb) 99,8 : 9,9 ≈ 10\nc) 10,3 × 2,9 ≈ 20\nd) 15,1 - 4,8 ≈ 10</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) SAI | d) ĐÚNG"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG. 50 + 50 = 100.\nb) ĐÚNG. 100 : 10 = 10.\nc) SAI. 10 × 3 = 30 (chứ không phải 20).\nd) ĐÚNG. 15 - 5 = 10.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhẩm sai phép nhân ước lượng ở câu c (10 × 3)."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Số thập phân 0,75 được viết dưới dạng phân số tối giản là:",
+        "options": [
+          "A. 75/100",
+          "B. 3/4",
+          "C. 4/3",
+          "D. 1/4"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Viết 0,75 = 75/100.\nBước 2: Chia cả tử và mẫu cho ƯCLN(75, 100) = 25.\nBước 3: 75:25 / 100:25 = 3/4.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh dừng lại ở 75/100 mà chưa rút gọn về phân số tối giản."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Làm tròn số 12 591,27 với độ chính xác d = 0,05 nghĩa là ta làm tròn số đó đến hàng nào?",
+        "options": [
+          "A. Hàng đơn vị",
+          "B. Hàng phần mười",
+          "C. Hàng phần trăm",
+          "D. Hàng chục"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Độ chính xác d = 0,05 thuộc hàng phần trăm (0,01).\nBước 2: Theo quy tắc, khi độ chính xác d ở hàng phần trăm thì ta làm tròn số đến hàng ngay phía trên nó 1 hàng, tức là hàng phần mười.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh rất hay nhầm lẫn làm tròn trực tiếp ở hàng phần trăm theo tên hàng của d."
+      },
+      {
+        "type": "fill",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Làm tròn số 12 591,27 với độ chính xác d = 0,05 thu được kết quả là bao nhiêu?",
+        "ansText": [
+          "12 591,3"
+        ],
+        "ansDisplay": "12 591,3",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Độ chính xác d = 0,05 -> Làm tròn đến hàng phần mười (chữ số 2).\nBước 2: Chữ số bên phải chữ số 2 là 7 >= 5.\nBước 3: Tăng 2 lên 1 đơn vị thành 3, bỏ chữ số 7 phía sau -> 12 591,3.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh làm tròn nhầm thành 12 591,25 hoặc giữ nguyên 12 591,2."
+      },
+      {
+        "type": "match",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Ghép các phép tính ở Cột A với kết quả làm tròn đến hàng phần trăm tương ứng ở Cột B:",
+        "left": [
+          "1) 10/3",
+          "2) 7/6",
+          "3) 5/11",
+          "4) 14/9"
+        ],
+        "right": [
+          "A) 1,17",
+          "B) 0,45",
+          "C) 1,56",
+          "D) 3,33"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nGhép đúng:\n• 1 - D (10/3 = 3,333... ≈ 3,33)\n• 2 - A (7/6 = 1,166... ≈ 1,17)\n• 3 - B (5/11 = 0,4545... ≈ 0,45)\n• 4 - C (14/9 = 1,555... ≈ 1,56)",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh quên tăng 1 đơn vị ở câu 7/6 (1,166... làm tròn thành 1,17) hay 14/9 (1,555... làm tròn thành 1,56)."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Tính giá trị biểu thức A = 0,(3) + 0,(6) dưới dạng phân số tối giản:",
+        "options": [
+          "A. 0,9",
+          "B. 9/10",
+          "C. 1",
+          "D. 0,(9)"
+        ],
+        "ans": 2,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Chuyển 0,(3) = 3/9 = 1/3.\nBước 2: Chuyển 0,(6) = 6/9 = 2/3.\nBước 3: Cộng hai phân số: A = 1/3 + 2/3 = 3/3 = 1.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay chọn A (0,9) hoặc B (9/10) do tính nhầm 0,3 + 0,6 = 0,9."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Xét tính Đúng/Sai của các phát biểu về quy tắc làm tròn số nguyên lớn:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Làm tròn số 45 670 đến hàng nghìn ta được 46 000.\nb) Làm tròn số 9 821 đến hàng trăm ta được 9 800.\nc) Làm tròn số 125 000 đến hàng chục nghìn ta được 130 000.\nd) Khi làm tròn số nguyên, các chữ số bị bỏ đi được thay thế bằng các chữ số 0.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) ĐÚNG | d) ĐÚNG"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG. Chữ số hàng nghìn là 5, bên phải là 6 >= 5 nên tăng thành 46 000.\nb) ĐÚNG. Chữ số hàng trăm là 8, bên phải là 2 < 5 nên giữ nguyên 9 800.\nc) ĐÚNG. Chữ số hàng chục nghìn là 2, bên phải là 5 >= 5 nên làm tròn thành 130 000.\nd) ĐÚNG. Quy tắc làm tròn số nguyên đòi hỏi thay các chữ số sau hàng làm tròn bằng số 0.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh khi làm tròn số nguyên hay quên thêm các số 0 vào sau hàng làm tròn (ví dụ làm tròn 45 670 thành 46)."
+      },
+      {
+        "type": "match",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Phân loại các số sau vào 2 nhóm: 'Viết được dưới dạng SOTP hữu hạn' và 'Viết được dưới dạng SOTP vô hạn tuần hoàn': 7/20 ; 11/15 ; 9/40 ; 4/11 ; 13/50 ; 5/6",
+        "left": [
+          "Mục 1",
+          "Mục 2",
+          "Mục 3",
+          "Mục 4"
+        ],
+        "right": [
+          "Đáp án 1",
+          "Đáp án 2",
+          "Đáp án 3",
+          "Đáp án 4"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Xét mẫu số sau khi rút gọn tối giản.\nBước 2: Mẫu chỉ có thừa số 2 và 5 xếp nhóm 1. Mẫu có chứa thừa số nguyên tố khác 2, 5 xếp nhóm 2.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh chưa kiểm tra tính tối giản của phân số trước khi phân tích mẫu."
+      },
+      {
+        "type": "order",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Sắp xếp các bước để giải bài toán ước lượng diện tích một khu vườn hình chữ nhật có chiều dài 19,8 m và chiều rộng 10,2 m:",
+        "items": [
+          "1. Bước 1: Làm tròn chiều dài 19,8 m đến hàng đơn vị ta được xấp xỉ 20 m.",
+          "2. Bước 2: Làm tròn chiều rộng 10,2 m đến hàng đơn vị ta được xấp xỉ 10 m.",
+          "3. Bước 3: Tính diện tích ước lượng theo công thức S ≈ 20 × 10 = 200 m².",
+          "4. Bước 4: Kết luận diện tích khu vườn xấp xỉ 200 m²."
+        ],
+        "hints": [
+          "Mức 1: Tìm bước xuất phát đầu tiên của lời giải.",
+          "Mức 2: Sắp xếp các bước suy luận theo trình tự logic.",
+          "Mức 3: Chọn bước kết luận ở vị trí cuối cùng."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nThứ tự chuẩn: Bước 1 -> Bước 2 -> Bước 3 -> Bước 4.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay tính diện tích chính xác trước (19,8 x 10,2 = 201,96) rồi mới làm tròn kết quả, trái với yêu cầu ước lượng nhanh."
+      },
+      {
+        "type": "fill",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Tìm chữ số hàng phần trăm của số thập phân vô hạn tuần hoàn A = 3,12(45).",
+        "ansText": [
+          "2"
+        ],
+        "ansDisplay": "2",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Phân tích số A = 3,12454545...\nBước 2: Chữ số sau dấu phẩy thứ nhất (hàng phần mười) là 1.\nBước 3: Chữ số sau dấu phẩy thứ hai (hàng phần trăm) là 2.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm lẫn thứ tự chữ số sau dấu phẩy, nhầm chữ số hàng phần trăm với chữ số thuộc chu kỳ (4 hoặc 5)."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Số A = 0,1010010001... (số chữ số 0 nằm giữa các số 1 tăng dần) là loại số thập phân nào?",
+        "options": [
+          "A. Số thập phân hữu hạn",
+          "B. Số thập phân vô hạn tuần hoàn",
+          "C. Số thập phân vô hạn không tuần hoàn",
+          "D. Phân số"
+        ],
+        "ans": 2,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Quan sát quy luật: Dãy số kéo dài vô hạn nhưng không có nhóm chữ số nào lặp đi lặp lại cố định.\nBước 2: Vậy A là số thập phân vô hạn không tuần hoàn (số vô tỉ).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh thấy có quy luật tăng số 0 nên nhầm là tuần hoàn."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số thập phân hữu hạn/vô hạn tuần hoàn & Làm tròn",
+        "q": "Xét tính Đúng/Sai của các nhận định sau:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Phân số 6/15 viết được dưới dạng số thập phân hữu hạn.\nb) Mọi số thập phân vô hạn đều là số vô hạn tuần hoàn.\nc) 0,1(6) = 1/6.\nd) Khi làm tròn số 0,049 đến hàng phần mười ta được 0,1.<br>Chủ đề Bài 6: Số vô tỉ và Căn bậc hai số học.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG. 6/15 = 2/5 (tối giản mẫu là 5) nên là số thập phân hữu hạn (0,4).\nb) SAI. Có số thập phân vô hạn không tuần hoàn.\nc) ĐÚNG. 1/6 = 0,1666... = 0,1(6).\nd) SAI. Chữ số hàng phần mười là 0, bên phải là 4 < 5 nên làm tròn thành 0,0.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay quên rút gọn 6/15 nên thấy mẫu 15 có 3 rồi vội kết luận là vô hạn tuần hoàn ở câu a."
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Ải 2: Khu Rừng Căn Bậc Hai",
+    "topic": "Số vô tỉ & Căn bậc hai số học",
+    "icon": "🌲",
+    "maxStars": 30,
+    "questions": [
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Căn bậc hai số học của số 81 là:",
+        "options": [
+          "A. 9",
+          "B. -9",
+          "C. 9 và -9",
+          "D. 81"
+        ],
+        "ans": 0,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Theo định nghĩa, căn bậc hai số học của số a không âm (a >= 0) là số x không âm sao cho x^2 = a.\nBước 2: Vì 9 >= 0 và 9^2 = 81 nên căn bậc hai số học của 81 là 9 (kí hiệu √81 = 9).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay nhầm lẫn giữa 'căn bậc hai số học' (chỉ lấy giá trị không âm) với 'căn bậc hai' (gồm hai giá trị đối nhau 9 và -9)."
+      },
+      {
+        "type": "fill",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Một mảnh đất hình vuông có diện tích 49 m². Độ dài cạnh của mảnh đất đó bằng bao nhiêu mét?",
+        "ansText": [
+          "7"
+        ],
+        "ansDisplay": "7",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Gọi độ dài cạnh mảnh đất hình vuông là x (m, x > 0).\nBước 2: Diện tích hình vuông là x² = 49.\nBước 3: Suy ra x = √49 = 7 (m).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh ghi nhầm đáp án là 49 : 4 = 12,25 m (nhầm công thức diện tích với chu vi)."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Xác định tính Đúng (Đ) hoặc Sai (S) của các đẳng thức chứa căn bậc hai sau:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) √16 = 4\nb) √(-25) = -5\nc) √0 = 0\nd) √((-3)²) = 3</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) SAI | c) ĐÚNG | d) ĐÚNG"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG. Vì 4² = 16 và 4 > 0.\nb) SAI. Số âm (-25) không có căn bậc hai số học trong tập số thực.\nc) ĐÚNG. √0 = 0.\nd) ĐÚNG. √((-3)²) = √9 = 3.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay sai ở câu b vì tưởng √(-25) = -5, quên rằng số dưới dấu căn phải không âm."
+      },
+      {
+        "type": "match",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Ghép số a ở Cột A với căn bậc hai số học √a tương ứng ở Cột B:",
+        "left": [
+          "1) a = 0,04",
+          "2) a = 121",
+          "3) a = 25/36",
+          "4) a = 100"
+        ],
+        "right": [
+          "A) 5/6",
+          "B) 10",
+          "C) 0,2",
+          "D) 11"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nGhép đúng:\n• 1 - C (√0,04 = 0,2)\n• 2 - D (√121 = 11)\n• 3 - A (√(25/36) = 5/6)\n• 4 - B (√100 = 10)",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay tính nhầm √0,04 thành 0,02."
+      },
+      {
+        "type": "match",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Phân loại các số sau vào 2 nhóm: 'Số hữu tỉ' và 'Số vô tỉ': √9 ; √2 ; 3/5 ; π ; -1,25 ; √7",
+        "left": [
+          "Mục 1",
+          "Mục 2",
+          "Mục 3",
+          "Mục 4"
+        ],
+        "right": [
+          "Đáp án 1",
+          "Đáp án 2",
+          "Đáp án 3",
+          "Đáp án 4"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Rút gọn các biểu thức dưới dấu căn: √9 = 3 (số hữu tỉ).\nBước 2: Các số căn không chính phương (√2, √7) và số π là số thập phân vô hạn không tuần hoàn nên thuộc Nhóm số vô tỉ.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh thấy √9 có dấu căn nên vội vàng xếp vào nhóm số vô tỉ."
+      },
+      {
+        "type": "order",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Hãy sắp xếp các bước sau để tìm x không âm biết √x = 5:",
+        "items": [
+          "1. Bước A: Điều kiện xác định: x ≥ 0.",
+          "2. Bước B: Bình phương hai vế của phương trình: (√x)² = 5².",
+          "3. Bước C: Ta được x = 25.",
+          "4. Bước D: Kiểm tra điều kiện x = 25 ≥ 0 (Thỏa mãn). Kết luận x = 25."
+        ],
+        "hints": [
+          "Mức 1: Tìm bước xuất phát đầu tiên của lời giải.",
+          "Mức 2: Sắp xếp các bước suy luận theo trình tự logic.",
+          "Mức 3: Chọn bước kết luận ở vị trí cuối cùng."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nThứ tự chuẩn: A -> B -> C -> D.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay tính nhầm x = √5 thay vì bình phương vế lên thành x = 25."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Số nào sau đây là số vô tỉ?",
+        "options": [
+          "A. √4",
+          "B. √1/9",
+          "C. √5",
+          "D. 0"
+        ],
+        "ans": 2,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Tính √4 = 2 (hữu tỉ).\nBước 2: Tính √(1/9) = 1/3 (hữu tỉ).\nBước 3: √5 = 2,2360679... là số thập phân vô hạn không tuần hoàn -> Số vô tỉ.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh chưa tính căn bậc hai của các phân số/số chính phương."
+      },
+      {
+        "type": "fill",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Tính giá trị của biểu thức A = √36 + √64 - √100.",
+        "ansText": [
+          "4"
+        ],
+        "ansDisplay": "4",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Tính √36 = 6.\nBước 2: Tính √64 = 8.\nBước 3: Tính √100 = 10.\nBước 4: Thay vào A = 6 + 8 - 10 = 14 - 10 = 4.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh lấy 36 + 64 - 100 = 0 rồi tính √0 = 0 (gộp dấu căn sai quy tắc)."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Sử dụng máy tính cầm tay, tính giá trị gần đúng của √15 làm tròn đến hàng phần trăm:",
+        "options": [
+          "A. 3,87",
+          "B. 3,88",
+          "C. 3,90",
+          "D. 3,872"
+        ],
+        "ans": 0,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Bấm máy tính √15 = 3,872983...\nBước 2: Hàng phần trăm là chữ số 7, chữ số bên phải là 2 < 5.\nBước 3: Kết quả làm tròn là 3,87.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm làm tròn tăng lên 3,88 hoặc không chú ý chữ số sau hàng làm tròn."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Đánh giá tính Đúng/Sai của các mệnh đề sau:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Số vô tỉ là số thập phân vô hạn không tuần hoàn.\nb) Tập hợp số vô tỉ được ký hiệu là I.\nc) Mọi căn bậc hai số học của một số tự nhiên đều là số vô tỉ.\nd) 0 không phải là số hữu tỉ cũng không phải là số vô tỉ.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG. Theo định nghĩa SGK.\nb) ĐÚNG. Kí hiệu I đại diện cho tập số vô tỉ (Irrational numbers).\nc) SAI. √4 = 2, √9 = 3 là số hữu tỉ.\nd) SAI. 0 = 0/1 là số hữu tỉ.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay tưởng mọi căn bậc hai số tự nhiên đều là số vô tỉ ở câu c."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "So sánh hai số 4 và √15:",
+        "options": [
+          "A. 4 < √15",
+          "B. 4 > √15",
+          "C. 4 = √15",
+          "D. Không so sánh được"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Đưa số 4 về dạng căn bậc hai số học: 4 = √16.\nBước 2: So sánh hai số dưới dấu căn: 16 > 15.\nBước 3: Vì 16 > 15 nên √16 > √15, hay 4 > √15.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh so sánh trực tiếp số 4 với số 15 dưới dấu căn rồi kết luận 4 < 15."
+      },
+      {
+        "type": "fill",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Tìm x không âm biết 2√x - 6 = 0.",
+        "ansText": [
+          "9"
+        ],
+        "ansDisplay": "9",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: 2√x = 6 -> √x = 6 : 2 = 3.\nBước 2: Bình phương hai vế: x = 3² = 9.\nBước 3: Thỏa mãn x ≥ 0.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh làm đến √x = 3 rồi suy ra x = 3 hoặc x = √3."
+      },
+      {
+        "type": "match",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Ghép biểu thức ở Cột A với kết quả thu gọn ở Cột B:",
+        "left": [
+          "1) √(2^4)",
+          "2) √(3^2 + 4^2)",
+          "3) √(0,81) / √(0,09)",
+          "4) 3√16 - 2√9"
+        ],
+        "right": [
+          "A) 5",
+          "B) 6",
+          "C) 4",
+          "D) 3"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nGhép đúng:\n• 1 - C (√16 = 4)\n• 2 - A (√(9+16) = √25 = 5)\n• 3 - D (0,9 / 0,3 = 3)\n• 4 - B (3 x 4 - 2 x 3 = 12 - 6 = 6)",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh tính sai câu 2: tưởng √(3² + 4²) = 3 + 4 = 7 (khai căn từng số hạng trong tổng là sai)."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Độ dài đường chéo của một màn hình tivi hình chữ nhật có chiều dài 40 cm và chiều rộng 30 cm là:",
+        "options": [
+          "A. 70 cm",
+          "B. 50 cm",
+          "C. 10 cm",
+          "D. 2500 cm"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Theo định lý Pythagore, d² = 40² + 30² = 1600 + 900 = 2500.\nBước 2: d = √2500 = 50 (cm).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh cộng trực tiếp 40 + 30 = 70 cm."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Xét tính Đúng/Sai của các đẳng thức sau với a, b > 0:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) √(a × b) = √a × √b\nb) √(a + b) = √a + √b\nc) √(a / b) = √a / √b\nd) √(a² - b²) = a - b</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG. Tính chất căn bậc hai tích.\nb) SAI. Căn của tổng không bằng tổng hai căn.\nc) ĐÚNG. Tính chất căn bậc hai thương.\nd) SAI. Căn của hiệu không bằng hiệu hai căn.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay áp dụng sai tính chất nhân/chia sang cho phép cộng/trừ ở câu b và d."
+      },
+      {
+        "type": "match",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Phân loại các số sau vào 3 nhóm thích hợp: √16 ; √8 ; √1/4 ; √0,9 ; √100 ; √3",
+        "left": [
+          "Mục 1",
+          "Mục 2",
+          "Mục 3",
+          "Mục 4"
+        ],
+        "right": [
+          "Đáp án 1",
+          "Đáp án 2",
+          "Đáp án 3",
+          "Đáp án 4"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Tính khai căn các số chính phương: √16=4, √100=10, √(1/4)=0,5.\nBước 2: √8, √0,9, √3 không khai căn ra số hữu tỉ -> Số vô tỉ.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh lầm tưởng √0,9 = 0,3 (vì 0,3^2 = 0,09 chứ không phải 0,9)."
+      },
+      {
+        "type": "order",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Sắp xếp các bước giải bài toán tìm x biết √(x + 3) = 4:",
+        "items": [
+          "1. Bước 1: Điều kiện: x + 3 ≥ 0 => x ≥ -3.",
+          "2. Bước 2: Bình phương hai vế: x + 3 = 4².",
+          "3. Bước 3: Giải phương trình: x + 3 = 16 => x = 16 - 3 = 13.",
+          "4. Bước 4: Đối chiếu điều kiện 13 ≥ -3 (Thỏa mãn). Kết luận x = 13."
+        ],
+        "hints": [
+          "Mức 1: Tìm bước xuất phát đầu tiên của lời giải.",
+          "Mức 2: Sắp xếp các bước suy luận theo trình tự logic.",
+          "Mức 3: Chọn bước kết luận ở vị trí cuối cùng."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nThứ tự chuẩn: Bước 1 -> Bước 2 -> Bước 3 -> Bước 4.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay quên điều kiện xác định hoặc tính 4² = 8."
+      },
+      {
+        "type": "fill",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Tính diện tích một hình vuông có độ dài đường chéo bằng √32 cm.",
+        "ansText": [
+          "16"
+        ],
+        "ansDisplay": "16",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Gọi cạnh hình vuông là a (cm). Ta có a² + a² = (√32)² = 32.\nBước 2: 2a² = 32 => a² = 16.\nBước 3: Diện tích hình vuông là S = a² = 16 cm².",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm lẫn tính ra a = 32 hoặc S = 32."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Trong các khẳng định sau, khẳng định nào SAI?",
+        "options": [
+          "A. Nếu a > b > 0 thì √a > √b",
+          "B. Với a ≥ 0 thì (√a)² = a",
+          "C. Số 0 không có căn bậc hai số học",
+          "D. √a² = |a| với mọi số thực a"
+        ],
+        "ans": 2,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Xét câu C: Số 0 có căn bậc hai số học là √0 = 0.\nBước 2: Vậy khẳng định C là SAI.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh tưởng số 0 không có căn bậc hai."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Số vô tỉ & Căn bậc hai số học",
+        "q": "Cho x là số thực. Đánh giá tính Đúng/Sai của các mệnh đề sau:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Nếu x² = 9 thì x = 3.\nb) Nếu √x = 3 thì x = 9.\nc) Nếu x² = 7 thì x = √7 hoặc x = -√7.\nd) √(x²) luôn bằng x với mọi x.<br>Chủ đề Bài 7 (Phần 1): Tập hợp các số thực ℝ, so sánh các số thực và biểu diễn số thực trên trục số.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) SAI. x² = 9 có hai nghiệm x = 3 hoặc x = -3.\nb) ĐÚNG. √x = 3 => x = 3² = 9.\nc) ĐÚNG. Phương trình x² = a (a > 0) có 2 nghiệm x = ±√a.\nd) SAI. √(x²) = |x| (nếu x âm thì bằng -x).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh rất hay sai ở câu a (thiếu nghiệm âm -3) và câu d (quên dấu giá trị tuyệt đối)."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Ải 3: Mê Cung Trục Số Thực",
+    "topic": "Tập hợp ℝ & So sánh các số thực",
+    "icon": "🏛️",
+    "maxStars": 30,
+    "questions": [
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Tập hợp các số thực được kí hiệu là:",
+        "options": [
+          "A. ℕ",
+          "B. ℤ",
+          "C. ℚ",
+          "D. ℝ"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: N là tập số tự nhiên, Z là tập số nguyên, Q là tập số hữu tỉ.\nBước 2: Tập hợp bao gồm cả số hữu tỉ và số vô tỉ được gọi là tập hợp số thực, ký hiệu là ℝ.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm lẫn kí hiệu giữa tập số hữu tỉ ℚ và tập số thực ℝ."
+      },
+      {
+        "type": "fill",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Điền kí hiệu thích hợp (∈ hoặc ∉) vào chỗ trống: √3 ...... ℝ",
+        "ansText": [
+          "∈"
+        ],
+        "ansDisplay": "∈",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: √3 là số vô tỉ.\nBước 2: Tập hợp số thực ℝ bao gồm cả số hữu tỉ và số vô tỉ.\nBước 3: Do đó √3 thuộc tập hợp ℝ (kí hiệu √3 ∈ ℝ).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh tưởng √3 là số vô tỉ nên không thuộc ℝ."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Xác định tính Đúng (Đ) hoặc Sai (S) của các quan hệ tập hợp sau:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) ℕ ⊂ ℤ\nb) ℤ ⊂ ℚ\nc) ℚ ⊂ ℝ\nd) I ⊂ ℚ</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG.\nb) ĐÚNG.\nc) ĐÚNG.\nd) SAI. Tập số vô tỉ I và tập số hữu tỉ ℚ không giao nhau (không tập nào chứa tập nào).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay sai câu d do tưởng I là tập con của ℚ."
+      },
+      {
+        "type": "match",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Ghép các số ở Cột A với số đối tương ứng của chúng ở Cột B:",
+        "left": [
+          "1) -√5",
+          "2) 3,14",
+          "3) √2",
+          "4) -2/3"
+        ],
+        "right": [
+          "A) 2/3",
+          "B) √5",
+          "C) -3,14",
+          "D) -√2"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nGhép đúng:\n• 1 - B (Số đối của -√5 là √5)\n• 2 - C (Số đối của 3,14 là -3,14)\n• 3 - D (Số đối của √2 là -√2)\n• 4 - A (Số đối của -2/3 là 2/3)",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh quên đổi dấu khi tìm số đối."
+      },
+      {
+        "type": "match",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Phân loại các số sau vào 2 nhóm: 'Số thực dương' và 'Số thực âm': -2,5 ; √7 ; -√3 ; 4/5 ; π ; -0,01",
+        "left": [
+          "Mục 1",
+          "Mục 2",
+          "Mục 3",
+          "Mục 4"
+        ],
+        "right": [
+          "Đáp án 1",
+          "Đáp án 2",
+          "Đáp án 3",
+          "Đáp án 4"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Các số lớn hơn 0 thuộc nhóm Số thực dương.\nBước 2: Các số nhỏ hơn 0 (có dấu trừ phía trước) thuộc nhóm Số thực âm.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm -√3 không phải số âm vì có dấu căn."
+      },
+      {
+        "type": "order",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Sắp xếp các bước để so sánh hai số thực -1,5 và -√2:",
+        "items": [
+          "1. Bước 1: Viết -1,5 = -√2,25.",
+          "2. Bước 2: So sánh hai số dưới dấu căn: 2,25 > 2 => √2,25 > √2.",
+          "3. Bước 3: Nhân hai vế với -1 (đổi chiều bất đẳng thức): -√2,25 < -√2.",
+          "4. Bước 4: Kết luận: -1,5 < -√2."
+        ],
+        "hints": [
+          "Mức 1: Tìm bước xuất phát đầu tiên của lời giải.",
+          "Mức 2: Sắp xếp các bước suy luận theo trình tự logic.",
+          "Mức 3: Chọn bước kết luận ở vị trí cuối cùng."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nThứ tự chuẩn: Bước 1 -> Bước 2 -> Bước 3 -> Bước 4.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay quên đổi chiều bất đẳng thức khi so sánh hai số âm."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Trên trục số thực, điểm biểu diễn số 0 nằm ở vị trí nào so với điểm biểu diễn số -√2?",
+        "options": [
+          "A. Bên trái",
+          "B. Bên phải",
+          "C. Trùng nhau",
+          "D. Khó xác định"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Vì -√2 là số thực âm nên -√2 < 0.\nBước 2: Trên trục số nằm ngang, số lớn hơn sẽ nằm bên phải số nhỏ hơn.\nBước 3: Do 0 > -√2 nên điểm 0 nằm bên phải điểm -√2.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm lẫn giữa hướng bên trái và bên phải trên trục số."
+      },
+      {
+        "type": "fill",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Tìm số nhỏ nhất trong các số thực sau: -3 ; √2 ; 0 ; -3,5 ; 1,2.",
+        "ansText": [
+          "-3,5"
+        ],
+        "ansDisplay": "-3,5",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Các số thực âm là -3 và -3,5.\nBước 2: So sánh hai số âm: |-3,5| = 3,5 > 3 = |-3| => -3,5 < -3.\nBước 3: Số nhỏ nhất là -3,5.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh chọn nhầm -3 là số nhỏ nhất."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Khẳng định nào sau đây là ĐÚNG?",
+        "options": [
+          "A. Mọi số thực đều là số hữu tỉ",
+          "B. Mọi số thực đều là số vô tỉ",
+          "C. Mọi số hữu tỉ đều là số thực",
+          "D. Số 0 không phải là số thực"
+        ],
+        "ans": 2,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Vì ℝ = ℚ ∪ I (tập số thực hợp bởi số hữu tỉ và vô tỉ).\nBước 2: Do đó mọi số hữu tỉ đều thuộc tập số thực (ℚ ⊂ ℝ).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm lẫn mối quan hệ bao hàm giữa tập hợp."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Đánh giá tính Đúng/Sai của các phát biểu về biểu diễn số thực trên trục số:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Mỗi số thực được biểu diễn bởi đúng một điểm trên trục số.\nb) Mỗi điểm trên trục số biểu diễn đúng một số thực.\nc) Điểm biểu diễn số √2 không thể dựng được bằng thước và compa.\nd) Trục số thực phủ kín bởi các điểm biểu diễn số thực.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) SAI | d) ĐÚNG"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG.\nb) ĐÚNG.\nc) SAI. Có thể dựng chính xác điểm √2 bằng độ dài đường chéo hình vuông cạnh 1.\nd) ĐÚNG. Trục số thực liên tục không có ô trống.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh tưởng số vô tỉ như √2 không biểu diễn chính xác được trên trục số ở câu c."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Sắp xếp các số thực sau theo thứ tự tăng dần: -√5 ; -2 ; 0 ; √3 ; 2,(1).",
+        "options": [
+          "A. -2 ; -√5 ; 0 ; √3 ; 2,(1)",
+          "B. -√5 ; -2 ; 0 ; √3 ; 2,(1)",
+          "C. 0 ; -2 ; -√5 ; √3 ; 2,(1)",
+          "D. -√5 ; -2 ; 0 ; 2,(1) ; √3"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Biểu diễn dạng số thập phân: -√5 ≈ -2,236 ; √3 ≈ 1,732 ; 2,(1) ≈ 2,111.\nBước 2: So sánh các số âm: -2,236 < -2 (tức -√5 < -2).\nBước 3: So sánh các số dương: 0 < 1,732 < 2,111 (tức 0 < √3 < 2,(1)).\nBước 4: Thứ tự tăng dần: -√5 ; -2 ; 0 ; √3 ; 2,(1).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm -2 < -√5 do so sánh 2 < 2,236 nhưng quên dấu âm."
+      },
+      {
+        "type": "fill",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Có bao nhiêu số nguyên x thỏa mãn điều kiện -√10 < x < √17?",
+        "ansText": [
+          "8"
+        ],
+        "ansDisplay": "8",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Ta có √9 < √10 < √16 => 3 < √10 < 4 => -4 < -√10 < -3.\nBước 2: Ta có √16 < √17 < √25 => 4 < √17 < 5.\nBước 3: Do đó -3,16 < x < 4,12.\nBước 4: Vì x ∈ ℤ nên x ∈ {-3; -2; -1; 0; 1; 2; 3; 4}.\nBước 5: Đếm có 8 số nguyên.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh bỏ sót số 0 hoặc đếm thiếu/thừa các mút nguyên (-3 hay 4)."
+      },
+      {
+        "type": "match",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Ghép số thực x ở Cột A với điều kiện của x ở Cột B:",
+        "left": [
+          "1) x² = 9",
+          "2) x³ = -8",
+          "3) x² = 5 (x > 0)",
+          "4) x² = -4"
+        ],
+        "right": [
+          "A) x = -2",
+          "B) x = ±3",
+          "C) Không tồn tại x",
+          "D) x = √5"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nGhép đúng:\n• 1 - B (x = ±3)\n• 2 - A (x = -2)\n• 3 - D (x = √5 vì x > 0)\n• 4 - C (Bình phương số thực không thể âm)",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh quên nghiệm âm ở câu 1 hoặc tưởng câu 4 có nghiệm x = -2."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Cho a = 22/7 và b = 3,14. Khẳng định nào sau đây đúng?",
+        "options": [
+          "A. a = b",
+          "B. a < b",
+          "C. a > b",
+          "D. Không so sánh được"
+        ],
+        "ans": 2,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Đổi 22/7 = 3,142857...\nBước 2: So sánh 3,142857... và 3,140000...\nBước 3: Thấy chữ số hàng phần nghìn 2 > 0 nên 22/7 > 3,14 (a > b).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay ngộ nhận 22/7 chính bằng 3,14 nên chọn A."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Xét tính Đúng/Sai của các mệnh đề sau về tập hợp số thực:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Giao của tập hợp số hữu tỉ ℚ và tập hợp số vô tỉ I là tập hợp rỗng (ℚ ∩ I = ∅).\nb) Hợp của tập hợp số hữu tỉ ℚ và tập hợp số vô tỉ I là tập hợp số thực ℝ (ℚ ∪ I = ℝ).\nc) Nếu a ∈ ℝ thì a là số hữu tỉ hoặc a là số vô tỉ.\nd) Có số thực không thuộc ℚ và cũng không thuộc I.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG.\nb) ĐÚNG.\nc) ĐÚNG.\nd) SAI. Mọi số thực bắt buộc thuộc ℚ hoặc thuộc I.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh sai câu d do chưa hiểu bản chất tập hợp ℝ phân hoạch thành ℚ và I."
+      },
+      {
+        "type": "match",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Phân loại các số thực sau vào 2 nhóm: 'Lớn hơn √3' và 'Nhỏ hơn √3': 1,5 ; 2 ; √2 ; 1,(8) ; 1,7 ; √5",
+        "left": [
+          "Mục 1",
+          "Mục 2",
+          "Mục 3",
+          "Mục 4"
+        ],
+        "right": [
+          "Đáp án 1",
+          "Đáp án 2",
+          "Đáp án 3",
+          "Đáp án 4"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Nhớ √3 ≈ 1,732.\nBước 2: So sánh từng số với 1,732 để xếp nhóm.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh xếp nhầm 1,7 vào nhóm lớn hơn √3."
+      },
+      {
+        "type": "order",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Sắp xếp các bước giải để chứng minh √2 là một số nằm giữa 1 và 2:",
+        "items": [
+          "1. Bước 1: Bình phương số 1 ta được 1² = 1.",
+          "2. Bước 2: Bình phương số 2 ta được 2² = 4.",
+          "3. Bước 3: So sánh: 1 < 2 < 4.",
+          "4. Bước 4: Lấy căn bậc hai số học các số: √1 < √2 < √4 hay 1 < √2 < 2."
+        ],
+        "hints": [
+          "Mức 1: Tìm bước xuất phát đầu tiên của lời giải.",
+          "Mức 2: Sắp xếp các bước suy luận theo trình tự logic.",
+          "Mức 3: Chọn bước kết luận ở vị trí cuối cùng."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nThứ tự chuẩn: Bước 1 -> Bước 2 -> Bước 3 -> Bước 4.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh bấm máy tính ra 1,414... rồi kết luận trực tiếp mà chưa chứng minh theo logic bất đẳng thức."
+      },
+      {
+        "type": "fill",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Tìm x biết (x - 1)² = 7 và x > 0. Làm tròn kết quả đến hàng phần mười.",
+        "ansText": [
+          "3,6"
+        ],
+        "ansDisplay": "3,6",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: (x - 1)² = 7 => x - 1 = √7 hoặc x - 1 = -√7.\nBước 2: Vì x > 0 nên x = 1 + √7.\nBước 3: Bấm máy tính 1 + √7 ≈ 1 + 2,6457 = 3,6457...\nBước 4: Làm tròn đến hàng phần mười được 3,6.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh quên cộng 1 hoặc làm tròn sai."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Trên trục số, khoảng cách giữa hai điểm biểu diễn hai số thực a = -2,5 và b = 1,5 là:",
+        "options": [
+          "A. -1",
+          "B. 1",
+          "C. 4",
+          "D. -4"
+        ],
+        "ans": 2,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Khoảng cách giữa hai điểm a và b trên trục số là |b - a|.\nBước 2: Tính |1,5 - (-2,5)| = |1,5 + 2,5| = |4| = 4.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh tính 1,5 - 2,5 = -1 nên chọn khoảng cách là -1 (khoảng cách không bao giờ âm)."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Tập hợp ℝ & So sánh các số thực",
+        "q": "Đánh giá tính Đúng/Sai của các câu khẳng định sau với x, y là các số thực:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Nếu x < y thì x² < y².\nb) Nếu x < y < 0 thì x² > y².\nc) Nếu 0 < x < y thì √x < √y.\nd) Nếu x < y thì -x > -y.<br>Chủ đề Bài 7 (Phần 2) và Ôn tập Chương 2: Giá trị tuyệt đối của một số thực và bài tập tổng hợp.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) SAI | b) ĐÚNG | c) ĐÚNG | d) ĐÚNG"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) SAI. Ví dụ -3 < 2 nhưng (-3)² = 9 > 4 = 2².\nb) ĐÚNG. Với hai số âm, số nào nhỏ hơn thì bình phương sẽ lớn hơn.\nc) ĐÚNG. Tính chất căn bậc hai số học.\nd) ĐÚNG. Nhân hai vế với -1 đổi chiều bất đẳng thức.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay sai ở câu a do áp dụng bình phương vế mà chưa xét dấu của x và y."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Ải 4: Đỉnh Núi Giá Trị Tuyệt Đối",
+    "topic": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+    "icon": "🏔️",
+    "maxStars": 30,
+    "questions": [
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Giá trị tuyệt đối của số thực x = -4,5 là:",
+        "options": [
+          "A. -4,5",
+          "B. 4,5",
+          "C. 0",
+          "D. 9"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Giá trị tuyệt đối của số âm là số đối của nó.\nBước 2: |-4,5| = -(-4,5) = 4,5.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh giữ nguyên dấu âm: |-4,5| = -4,5."
+      },
+      {
+        "type": "fill",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Tính giá trị của biểu thức A = |-3| + |0| - |-5|.",
+        "ansText": [
+          "-2"
+        ],
+        "ansDisplay": "-2",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: |-3| = 3.\nBước 2: |0| = 0.\nBước 3: |-5| = 5.\nBước 4: Thay vào A = 3 + 0 - 5 = -2.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh tính |-5| = -5 rồi lấy 3 - (-5) = 8 (nhầm dấu giá trị tuyệt đối)."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Xác định tính Đúng (Đ) hoặc Sai (S) của các mệnh đề sau về giá trị tuyệt đối:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Giá trị tuyệt đối của một số thực luôn là một số không âm (|x| ≥ 0 với mọi x).\nb) Hai số đối nhau có giá trị tuyệt đối bằng nhau (|x| = |-x|).\nc) Giá trị tuyệt đối của 0 bằng 0.\nd) Nếu |x| = 5 thì x = 5.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG.\nb) ĐÚNG.\nc) ĐÚNG.\nd) SAI. Nếu |x| = 5 thì x = 5 hoặc x = -5.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh quên nghiệm âm x = -5 ở câu d."
+      },
+      {
+        "type": "match",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Ghép giá trị x ở Cột A với |x| tương ứng ở Cột B:",
+        "left": [
+          "1) x = -√7",
+          "2) x = 2 - √5",
+          "3) x = 3,14 - π",
+          "4) x = -3/4"
+        ],
+        "right": [
+          "A) 3/4",
+          "B) √7",
+          "C) √5 - 2",
+          "D) π - 3,14"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nGhép đúng:\n• 1 - B (|-√7| = √7)\n• 2 - C (Vì 2 < √5 nên 2 - √5 < 0 => |2 - √5| = √5 - 2)\n• 3 - D (Vì 3,14 < π nên 3,14 - π < 0 => |3,14 - π| = π - 3,14)\n• 4 - A (|-3/4| = 3/4)",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh giữ nguyên 2 - √5 ở câu 2 do không kiểm tra dấu âm của biểu thức."
+      },
+      {
+        "type": "match",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Phân loại các khẳng định sau vào 2 nhóm: 'Đúng với mọi x' và 'Không đúng với mọi x': |x| ≥ 0 ; |x| = x ; |-x| = |x| ; |x| > 0",
+        "left": [
+          "Mục 1",
+          "Mục 2",
+          "Mục 3",
+          "Mục 4"
+        ],
+        "right": [
+          "Đáp án 1",
+          "Đáp án 2",
+          "Đáp án 3",
+          "Đáp án 4"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Kiểm tra tính đúng đắn tại x = 0 và x âm.\nBước 2: Nhóm 2 chứa các mệnh đề bị thiếu điều kiện hoặc sai tại x = 0.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh cho rằng |x| luôn lớn hơn 0 (quên trường hợp x = 0)."
+      },
+      {
+        "type": "order",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Sắp xếp các bước giải bài toán tìm x biết |x| = 3,5:",
+        "items": [
+          "1. Bước 1: Nhận xét vế phải 3,5 > 0 nên phương trình có hai nghiệm.",
+          "2. Bước 2: Áp dụng định nghĩa giá trị tuyệt đối: x = 3,5 hoặc x = -3,5.",
+          "3. Bước 3: Kết luận vậy x ∈ {3,5; -3,5}."
+        ],
+        "hints": [
+          "Mức 1: Tìm bước xuất phát đầu tiên của lời giải.",
+          "Mức 2: Sắp xếp các bước suy luận theo trình tự logic.",
+          "Mức 3: Chọn bước kết luận ở vị trí cuối cùng."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nThứ tự chuẩn: Bước 1 -> Bước 2 -> Bước 3.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay bỏ qua bước kiểm tra vế phải âm hay dương."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Khoảng cách từ điểm -7 đến điểm 0 trên trục số là bao nhiêu?",
+        "options": [
+          "A. -7",
+          "B. 7",
+          "C. 0",
+          "D. 14"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Khoảng cách từ điểm a đến 0 trên trục số chính là giá trị tuyệt đối |a|.\nBước 2: Tính |-7| = 7.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh chọn A (-7) do nhầm khoảng cách với tọa độ."
+      },
+      {
+        "type": "fill",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Tìm x biết |x| = 0.",
+        "ansText": [
+          "0"
+        ],
+        "ansDisplay": "0",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Chỉ có duy nhất số 0 có giá trị tuyệt đối bằng 0.\nBước 2: x = 0.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh viết x = ±0."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Cho |x| = -2. Khẳng định nào sau đây đúng?",
+        "options": [
+          "A. x = 2",
+          "B. x = -2",
+          "C. x = ±2",
+          "D. Không có giá trị nào của x thỏa mãn"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Nhận xét |x| ≥ 0 với mọi x ∈ ℝ.\nBước 2: Vế phải là -2 < 0 (vô lý).\nBước 3: Không có giá trị nào của x thỏa mãn.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh suy ra x = 2 hoặc x = -2 do thói quen bỏ dấu giá trị tuyệt đối."
+      },
+      {
+        "type": "mc",
+        "diff": "easy",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Đánh giá tính Đúng/Sai của các câu sau:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Giá trị tuyệt đối của số dương là chính nó.\nb) Giá trị tuyệt đối của số âm là số đối của nó.\nc) Nếu x < 0 thì |x| = -x.\nd) |-√3| = -√3.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG.\nb) ĐÚNG.\nc) ĐÚNG (vì x âm nên -x sẽ dương).\nd) SAI. |-√3| = √3.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay tưởng câu c sai vì thấy dấu trừ trước x."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Tìm x biết |x - 1,5| = 2:",
+        "options": [
+          "A. x = 3,5",
+          "B. x = -0,5",
+          "C. x = 3,5 hoặc x = -0,5",
+          "D. x = 0,5"
+        ],
+        "ans": 2,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Trường hợp 1: x - 1,5 = 2 => x = 2 + 1,5 = 3,5.\nBước 2: Trường hợp 2: x - 1,5 = -2 => x = -2 + 1,5 = -0,5.\nBước 3: Kết luận x = 3,5 hoặc x = -0,5.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh chỉ giải trường hợp 1 ra x = 3,5 mà quên trường hợp 2."
+      },
+      {
+        "type": "fill",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Tìm giá trị nhỏ nhất của biểu thức A = |x - 3| + 5.",
+        "ansText": [
+          "5"
+        ],
+        "ansDisplay": "5",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Vì |x - 3| ≥ 0 với mọi x.\nBước 2: Cộng 5 vào hai vế: A = |x - 3| + 5 ≥ 0 + 5 = 5.\nBước 3: Dấu '=' xảy ra khi x - 3 = 0 => x = 3.\nBước 4: Giá trị nhỏ nhất của A là 5.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh trả lời giá trị nhỏ nhất bằng 0 hoặc x = 3."
+      },
+      {
+        "type": "match",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Ghép phương trình ở Cột A với số nghiệm x tương ứng ở Cột B:",
+        "left": [
+          "1)",
+          "2x - 1",
+          "= 0",
+          "2)",
+          "x + 3",
+          "= -5",
+          "3)",
+          "3x + 2",
+          "= 7",
+          "4)",
+          "x",
+          "= x"
+        ],
+        "right": [
+          "A) 0 nghiệm",
+          "B) 1 nghiệm",
+          "C) 2 nghiệm",
+          "D) Vô số nghiệm (x ≥ 0)"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nGhép đúng:\n• 1 - B (2x - 1 = 0 => 1 nghiệm x = 1/2)\n• 2 - A (Vế phải âm => 0 nghiệm)\n• 3 - C (3x + 2 = ±7 => 2 nghiệm x = 5/3 hoặc x = -3)\n• 4 - D (Đúng với mọi x ≥ 0 => Vô số nghiệm)",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh hay nhầm câu 1 có 2 nghiệm x = ±0."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Rút gọn biểu thức B = x + |x| khi x < 0 ta được kết quả là:",
+        "options": [
+          "A. 2x",
+          "B. 0",
+          "C. -2x",
+          "D. -x"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Vì x < 0 nên theo định nghĩa |x| = -x.\nBước 2: Thay vào biểu thức: B = x + (-x) = 0.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh cho rằng |x| = x nên lấy x + x = 2x."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Cho biểu thức C = 10 - |x + 2|. Đánh giá tính Đúng/Sai của các phát biểu sau:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Giá trị của C luôn nhỏ hơn hoặc bằng 10 với mọi x.\nb) Giá trị lớn nhất của C bằng 10.\nc) Giá trị lớn nhất của C đạt được khi x = -2.\nd) Không tồn tại x để C = 0.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG. Vì |x + 2| ≥ 0 => -|x + 2| ≤ 0 => C ≤ 10.\nb) ĐÚNG.\nc) ĐÚNG. Khi x + 2 = 0 => x = -2.\nd) SAI. Khi |x + 2| = 10 => x = 8 hoặc x = -12 thì C = 0.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm lẫn giữa giá trị lớn nhất và giá trị nhỏ nhất của biểu thức có chứa dấu trừ trước giá trị tuyệt đối."
+      },
+      {
+        "type": "match",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Phân loại các số sau theo vị trí khoảng cách đến số 0 trên trục số: |-8| ; |3| ; |-10| ; |√5| ; |-1,5| ; |9|",
+        "left": [
+          "Mục 1",
+          "Mục 2",
+          "Mục 3",
+          "Mục 4"
+        ],
+        "right": [
+          "Đáp án 1",
+          "Đáp án 2",
+          "Đáp án 3",
+          "Đáp án 4"
+        ],
+        "hints": [
+          "Mức 1: Quan sát vế bên trái và vế bên phải.",
+          "Mức 2: Tính toán và ghép từng cặp tương ứng.",
+          "Mức 3: Chạm ô bên trái rồi chọn ô phù hợp bên phải."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Tính giá trị tuyệt đối của từng số.\nBước 2: So sánh kết quả với 5 để phân loại.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh lấy số âm ban đầu để so sánh chứ không lấy giá trị tuyệt đối."
+      },
+      {
+        "type": "order",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Sắp xếp các bước giải bài toán tìm x biết 2|x - 1| + 3 = 9:",
+        "items": [
+          "1. Bước 1: Chuyển vế: 2|x - 1| = 9 - 3 = 6.",
+          "2. Bước 2: Chia 2 vế cho 2: |x - 1| = 6 : 2 = 3.",
+          "3. Bước 3: Chia 2 trường hợp: x - 1 = 3 hoặc x - 1 = -3.",
+          "4. Bước 4: Giải ra x = 4 hoặc x = -2. Kết luận x ∈ {4; -2}."
+        ],
+        "hints": [
+          "Mức 1: Tìm bước xuất phát đầu tiên của lời giải.",
+          "Mức 2: Sắp xếp các bước suy luận theo trình tự logic.",
+          "Mức 3: Chọn bước kết luận ở vị trí cuối cùng."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nThứ tự chuẩn: Bước 1 -> Bước 2 -> Bước 3 -> Bước 4.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh chưa chuyển vế số 3 đã vội phá dấu giá trị tuyệt đối."
+      },
+      {
+        "type": "fill",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Tính giá trị của biểu thức M = |x - y| + |y - z| khi x = 1, y = 4, z = -2.",
+        "ansText": [
+          "9"
+        ],
+        "ansDisplay": "9",
+        "hints": [
+          "Mức 1: Đọc đề và xác định đại lượng cần tính.",
+          "Mức 2: Thực hiện biến đổi hoặc làm tròn theo yêu cầu.",
+          "Mức 3: Nhập số hoặc biểu thức ngắn vào ô đáp án."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Tính |x - y| = |1 - 4| = |-3| = 3.\nBước 2: Tính |y - z| = |4 - (-2)| = |4 + 2| = |6| = 6.\nBước 3: M = 3 + 6 = 9.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh tính sai 4 - (-2) = 2 dẫn đến M = 5."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Với mọi số thực a, b bất kỳ, bất đẳng thức nào sau đây luôn ĐÚNG?",
+        "options": [
+          "A. |a + b| = |a| + |b|",
+          "B. |a + b| ≤ |a| + |b|",
+          "C. |a + b| ≥ |a| + |b|",
+          "D. |a - b| = |a| - |b|"
+        ],
+        "ans": 1,
+        "hints": [
+          "Mức 1: Quan sát câu hỏi và xem xét từng phương án lựa chọn.",
+          "Mức 2: Áp dụng định nghĩa/quy tắc trong SGK Toán 7 để phân tích.",
+          "Mức 3: Chọn phương án chính xác nhất dựa trên lập luận."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\nBước 1: Đây là bất đẳng thức tam giác mở rộng cho giá trị tuyệt đối số thực.\nBước 2: |a + b| ≤ |a| + |b| với mọi a, b ∈ ℝ.\nDấu '=' xảy ra khi a, b cùng dấu (a.b ≥ 0).",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh ngộ nhận đẳng thức A luôn đúng."
+      },
+      {
+        "type": "mc",
+        "diff": "medium",
+        "topicTag": "Giá trị tuyệt đối của số thực & Ôn tập chương",
+        "q": "Xét tính Đúng/Sai của bài toán Ôn tập tổng hợp Chương 2 sau:<br><div style=\"font-size:14px; color:#475569; margin-top:6px;\">a) Căn bậc hai số học của 0,09 là 0,3.\nb) Số -√2 là số vô tỉ.\nc) Giá trị tuyệt đối của một số thực x là khoảng cách từ điểm x đến điểm 0 trên trục số.\nd) Phân số 4/9 viết được dưới dạng số thập phân hữu hạn.</div>",
+        "options": [
+          "A. a) ĐÚNG | b) SAI | c) ĐÚNG | d) SAI",
+          "B. a) ĐÚNG | b) ĐÚNG | c) SAI | d) SAI",
+          "C. a) SAI | b) ĐÚNG | c) ĐÚNG | d) SAI",
+          "D. a) ĐÚNG | b) ĐÚNG | c) ĐÚNG | d) SAI"
+        ],
+        "ans": 3,
+        "hints": [
+          "Mức 1: Đọc và đánh giá tính Đúng/Sai của từng mệnh đề a, b, c, d.",
+          "Mức 2: Nhớ lại quy tắc trong SGK để xác định mệnh đề sai.",
+          "Mức 3: Chọn phương án ghép tổ hợp Đúng/Sai chính xác."
+        ],
+        "steps": "Giải thích & Chẩn đoán lỗi sai:\na) ĐÚNG. Vì 0,3 > 0 và 0,3² = 0,09.\nb) ĐÚNG. √2 là số vô tỉ nên -√2 cũng là số vô tỉ.\nc) ĐÚNG. Theo định nghĩa hình học của giá trị tuyệt đối.\nd) SAI. 4/9 = 0,444... = 0,(4) là số thập phân vô hạn tuần hoàn.",
+        "mistake": "⚠️ Chẩn đoán lỗi sai & Bẫy cần tránh: Học sinh nhầm 4/9 là số thập phân hữu hạn ở câu d."
+      }
+    ]
+  }
+];
+
+// =========================================================================
+// 3. QUẢN LÝ TRẠNG THÁI NGƯỜI CHƠI & LỊCH SỬ THỐNG KÊ THEO DẠNG BÀI
+// =========================================================================
+let player = JSON.parse(localStorage.getItem('vqht_player_save')) || null;
+
+function ensurePlayerTopicStats(p) {
+  if (!p.topicStats) p.topicStats = {};
+  ALL_TOPICS_14.forEach(t => {
+    if (!p.topicStats[t]) p.topicStats[t] = { done: 0, wrong: 0 };
+  });
+}
+
+function savePlayer() {
+  if (player) {
+    ensurePlayerTopicStats(player);
+    localStorage.setItem('vqht_player_save', JSON.stringify(player));
+    upsertLocalStudentRecord(player);
+  }
+}
+
+// Lưu danh sách học sinh đã chơi trên máy / đã đồng bộ để Giáo viên xem ngay cả khi chưa tải mạng
+function getSavedStudentsList() {
+  return JSON.parse(localStorage.getItem('vqht_all_students')) || [];
+}
+
+function upsertLocalStudentRecord(p) {
+  const list = getSavedStudentsList();
+  const totalStars = p.landStars.reduce((a, b) => a + b, 0);
+  const totalDone = Object.values(p.topicStats || {}).reduce((s, x) => s + x.done, 0) || p.totalCorrect;
+  const record = {
+    tenHocSinh: p.name,
+    lop: (p.studentClass || "7A").toUpperCase().trim(),
+    capDo: p.level,
+    sao: totalStars,
+    cauDung: p.totalCorrect,
+    tongCauDaLam: Math.max(totalDone, p.totalCorrect),
+    vungDatMo: p.unlockedLand + (p.landStars[4] >= 15 ? 1 : 0),
+    topicStats: p.topicStats || {}
+  };
+  const idx = list.findIndex(x => x.tenHocSinh.toLowerCase() === record.tenHocSinh.toLowerCase() && x.lop === record.lop);
+  if (idx >= 0) list[idx] = record;
+  else list.push(record);
+  localStorage.setItem('vqht_all_students', JSON.stringify(list));
+}
+
+function initApp() {
+  document.getElementById('disp-teacher').textContent = teacherConfig.teacherName;
+  document.getElementById('disp-school').textContent = teacherConfig.schoolName;
+  document.getElementById('td-subtitle').textContent = `Giáo viên: ${teacherConfig.teacherName} • ${teacherConfig.schoolName}`;
+  document.getElementById('cfg-teacher').value = teacherConfig.teacherName;
+  document.getElementById('cfg-school').value = teacherConfig.schoolName;
+  document.getElementById('cfg-script').value = teacherConfig.scriptUrl;
+
+  if (player) {
+    ensurePlayerTopicStats(player);
+    document.getElementById('btn-continue').style.display = 'inline-flex';
+    document.getElementById('cont-name').textContent = player.name;
+  }
+}
+
+function openNewCharModal() {
+  playSoundEffect('click');
+  document.getElementById('modal-newchar').classList.add('open');
+}
+
+function selectAvatar(el) {
+  playSoundEffect('click');
+  document.querySelectorAll('.av-opt').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function createNewCharacter() {
+  const name = document.getElementById('inp-student-name').value.trim();
+  const cls = document.getElementById('inp-student-class').value.trim().toUpperCase() || "7A4";
+  if (!name) {
+    alert("Em hãy nhập Họ và tên của mình trước nhé!");
+    return;
+  }
+  const av = document.querySelector('.av-opt.selected').dataset.av;
+  player = {
+    name: name,
+    studentClass: cls,
+    avatar: av,
+    xp: 0,
+    level: 1,
+    coins: 50,
+    unlockedLand: 0,
+    landStars: [0, 0, 0, 0, 0],
+    totalCorrect: 0,
+    items: { hints: 2, fifty: 1, skip: 0, heal: 1 },
+    badges: ["b1"],
+    topicStats: {}
+  };
+  ensurePlayerTopicStats(player);
+  savePlayer();
+  closeModals();
+  enterHub();
+}
+
+function continueGame() {
+  playSoundEffect('click');
+  if (player) enterHub();
+}
+
+function goHome() {
+  playSoundEffect('click');
+  document.getElementById('app').classList.remove('wide-mode');
+  initApp();
+  showScreen('screen-home');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function closeModals() {
+  document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('open'));
+}
+
+function openTeacherSettingsModal() {
+  playSoundEffect('click');
+  document.getElementById('modal-teacher-settings').classList.add('open');
+}
+
+function saveTeacherConfig() {
+  teacherConfig.teacherName = document.getElementById('cfg-teacher').value.trim() || "Trần Thị Thu Chẳng";
+  teacherConfig.schoolName = document.getElementById('cfg-school').value.trim() || "Trường THCS Nam Đàn";
+  teacherConfig.scriptUrl = document.getElementById('cfg-script').value.trim() || DEFAULT_SCRIPT_URL;
+  localStorage.setItem('vqht_teacher_cfg', JSON.stringify(teacherConfig));
+  initApp();
+  closeModals();
+  alert("Đã lưu cấu hình giáo viên!");
+}
+
+// =========================================================================
+// 4. MÀN HÌNH BẢN ĐỒ, CỬA HÀNG, HUY HIỆU & HỒ SƠ
+// =========================================================================
+function updateHud() {
+  if (!player) return;
+  player.level = Math.floor(player.xp / 100) + 1;
+  const currentXpInLevel = player.xp % 100;
+
+  ['', 'q-'].forEach(prefix => {
+    document.getElementById(prefix + 'hud-avatar').textContent = player.avatar;
+    document.getElementById(prefix + 'hud-name').textContent = player.name;
+    document.getElementById(prefix + 'hud-lvl').textContent = `Cấp ${player.level}`;
+    document.getElementById(prefix + 'hud-xp-fill').style.width = `${currentXpInLevel}%`;
+    document.getElementById(prefix + 'hud-xp-text').textContent = `${currentXpInLevel}/100 XP`;
+    document.getElementById(prefix + 'hud-coins').textContent = player.coins;
+  });
+
+  document.getElementById('prof-name').textContent = player.name;
+  document.getElementById('prof-class').textContent = player.studentClass;
+  const totalStars = player.landStars.reduce((a, b) => a + b, 0);
+  document.getElementById('prof-stars').textContent = `${totalStars}/120`;
+  document.getElementById('prof-correct').textContent = player.totalCorrect;
+}
+
+function enterHub() {
+  document.getElementById('app').classList.remove('wide-mode');
+  updateHud();
+  renderMap();
+  renderBadges();
+  showScreen('screen-hub');
+}
+
+function switchTab(tabName, btnEl) {
+  playSoundEffect('click');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  btnEl.classList.add('active');
+
+  document.getElementById('tab-map').style.display = (tabName === 'map') ? 'flex' : 'none';
+  ['shop', 'badges', 'review', 'profile'].forEach(t => {
+    document.getElementById('tab-' + t).classList.toggle('active', t === tabName);
+  });
+  updateHud();
+}
+
+function renderMap() {
+  const mapEl = document.getElementById('tab-map');
+  mapEl.innerHTML = '';
+
+  LANDS.forEach((land, idx) => {
+    const isUnlocked = idx <= player.unlockedLand;
+    const isCurrent = idx === player.unlockedLand;
+    const node = document.createElement('div');
+    node.className = 'land-node';
+
+    node.innerHTML = `
+      <div class="land-circle ${isUnlocked ? '' : 'locked'}" onclick="selectLand(${idx})">
+        ${isUnlocked ? land.icon : '🔒'}
+        ${isCurrent ? `<div class="land-badge-char">${player.avatar}</div>` : ''}
+      </div>
+      <div class="land-label">${land.name}</div>
+      <div class="land-status ${isUnlocked ? '' : 'locked-txt'}">
+        ${isUnlocked ? `⭐ ${player.landStars[idx]}/${land.maxStars}` : 'Chưa mở'}
+      </div>
+    `;
+    mapEl.appendChild(node);
+  });
+}
+
+let selectedLandIdx = 0;
+
+function selectLand(idx) {
+  if (idx > player.unlockedLand) {
+    playSoundEffect('wrong');
+    alert("Em cần hoàn thành vùng đất trước đó để mở khóa vùng đất này nhé!");
+    return;
+  }
+  playSoundEffect('click');
+  selectedLandIdx = idx;
+  const land = LANDS[idx];
+  document.getElementById('modal-land-title').textContent = land.name;
+  document.getElementById('modal-land-desc').textContent = `${land.topic} (Dễ ${getLandQuestions(idx, 'easy').length} • Thường ${getLandQuestions(idx, 'medium').length} • Khó ${getLandQuestions(idx, 'hard').length} thử thách). Sai một câu mất một tim.`;
+  document.getElementById('modal-diff').classList.add('open');
+}
+
+function buyItem(itemKey, price) {
+  if (player.coins < price) {
+    playSoundEffect('wrong');
+    alert("Em chưa đủ vàng! Hãy chinh phục thêm các câu hỏi để kiếm vàng nhé.");
+    return;
+  }
+  playSoundEffect('correct');
+  player.coins -= price;
+  player.items[itemKey] += 1;
+  savePlayer();
+  updateHud();
+  alert("Mua vật phẩm thành công!");
+}
+
+function renderBadges() {
+  const list = document.getElementById('badges-list');
+  list.innerHTML = '';
+  BADGES_DATA.forEach(b => {
+    const has = player.badges.includes(b.id);
+    list.innerHTML += `
+      <div class="badge-item ${has ? 'unlocked' : ''}">
+        <div style="font-size:34px;">${b.icon}</div>
+        <div style="font-weight:900; font-size:15px; margin:4px 0;">${b.title}</div>
+        <div style="font-size:12px; color:#475569;">${b.desc}</div>
+      </div>
+    `;
+  });
+}
+
+// =========================================================================
+// 5. LOGIC CHƠI TỪNG ẢI & CHẤM ĐIỂM TỪNG BƯỚC
+// =========================================================================
+let stageState = {
+  landIdx: 0,
+  diff: 'medium',
+  mult: 1.5,
+  qIndex: 0,
+  hearts: 5,
+  selectedOpt: null,
+  fillText: '',
+  hintLevel: 0,
+  answered: false,
+  results: []
+};
+
+function startStage(diff) {
+  playSoundEffect('click');
+  closeModals();
+  const multMap = { easy: 1, medium: 1.5, hard: 2 };
+  const labelMap = { easy: 'Dễ', medium: 'Thường', hard: 'Khó' };
+
+  stageState = {
+    landIdx: selectedLandIdx,
+    diff: diff,
+    mult: multMap[diff],
+    diffLabel: labelMap[diff],
+    qIndex: 0,
+    hearts: 5,
+    selectedOpt: null,
+    fillText: '',
+    hintLevel: 0,
+    answered: false,
+    results: [],
+    qs: getLandQuestions(selectedLandIdx, diff)
+  };
+
+  document.getElementById('stage-title-bar').textContent = `${LANDS[selectedLandIdx].name} • ${labelMap[diff]}`;
+  document.getElementById('q-diff-badge').textContent = labelMap[diff].toUpperCase();
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function exitStage() {
+  if (confirm("Em muốn tạm dừng ải này để quay về bản đồ? Tiến trình chung của nhân vật vẫn được lưu.")) {
+    enterHub();
+  }
+}
+
+function renderQuestion() {
+  const q = stageState.qs[stageState.qIndex];
+
+  stageState.selectedOpt = null;
+  stageState.fillText = '';
+  stageState.hintLevel = 0;
+  stageState.answered = false;
+
+  document.getElementById('hearts-display').textContent = '❤️'.repeat(stageState.hearts) + '🖤'.repeat(5 - stageState.hearts);
+  const segEl = document.getElementById('progress-segments');
+  segEl.innerHTML = '';
+  stageState.qs.forEach((_, i) => {
+    let cls = 'seg';
+    if (stageState.results[i]) cls += ' ' + stageState.results[i];
+    else if (i === stageState.qIndex) cls += ' current';
+    segEl.innerHTML += `<div class="${cls}"></div>`;
+  });
+
+  document.getElementById('q-text').innerHTML = `Câu ${stageState.qIndex + 1}: ${q.q}`;
+  document.getElementById('hint-box').classList.remove('show');
+  document.getElementById('hint-box').innerHTML = '';
+  document.getElementById('result-panel').classList.remove('show');
+
+  const checkBtn = document.getElementById('btn-check-answer');
+  checkBtn.style.display = 'inline-flex';
+  checkBtn.disabled = true;
+
+  document.getElementById('hint-level-txt').textContent = '0/3';
+  document.getElementById('pu-hint-count').textContent = `${player.items.hints} miễn phí`;
+  document.getElementById('pu-fifty-count').textContent = player.items.fifty;
+  document.getElementById('pu-skip-count').textContent = player.items.skip;
+  document.getElementById('pu-heal-count').textContent = player.items.heal;
+
+  document.getElementById('pu-hint').disabled = false;
+  document.getElementById('pu-fifty').disabled = (q.type !== 'mc' || q.options.length <= 2 || player.items.fifty <= 0);
+  document.getElementById('pu-skip').disabled = (player.items.skip <= 0);
+  document.getElementById('pu-heal').disabled = (player.items.heal <= 0 || stageState.hearts >= 5);
+
+  if (q.type === 'match' || q.type === 'order' || q.type === 'numline') {
+    initSpecial(q);
+    return;
+  }
+  ['match', 'order', 'numline'].forEach(k => { document.getElementById(k + '-area').style.display = 'none'; });
+
+  if (q.type === 'mc') {
+    document.getElementById('q-type-label').textContent = 'TRẮC NGHIỆM';
+    document.getElementById('mc-area').style.display = 'flex';
+    document.getElementById('fill-area').style.display = 'none';
+
+    const mcArea = document.getElementById('mc-area');
+    mcArea.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D'];
+    q.options.forEach((optHtml, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerHTML = `<span class="opt-letter">${letters[idx]}</span><span>${optHtml}</span>`;
+      btn.onclick = () => selectOption(idx, btn);
+      mcArea.appendChild(btn);
+    });
+  } else {
+    document.getElementById('q-type-label').textContent = 'ĐIỀN ĐÁP SỐ';
+    document.getElementById('mc-area').style.display = 'none';
+    document.getElementById('fill-area').style.display = 'block';
+    updateFillDisplay();
+  }
+}
+
+function selectOption(idx, btnEl) {
+  if (stageState.answered) return;
+  playSoundEffect('click');
+  stageState.selectedOpt = idx;
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  btnEl.classList.add('selected');
+  document.getElementById('btn-check-answer').disabled = false;
+}
+
+function pressKey(k) {
+  if (stageState.answered) return;
+  playSoundEffect('click');
+  if (k === 'BACK') stageState.fillText = stageState.fillText.slice(0, -1);
+  else if (stageState.fillText.length < 10) stageState.fillText += k;
+  updateFillDisplay();
+}
+
+function updateFillDisplay() {
+  const txt = stageState.fillText;
+  document.getElementById('fill-input-box').textContent = txt;
+  let previewHtml = txt;
+  if (txt.includes('/')) {
+    const parts = txt.split('/');
+    if (parts.length === 2 && parts[0] !== '' && parts[1] !== '') previewHtml = F(parts[0], parts[1]);
+  }
+  document.getElementById('fill-preview-box').innerHTML = `Em viết: ${previewHtml || '...'}`;
+  document.getElementById('btn-check-answer').disabled = (txt.trim().length === 0);
+}
+
+function useHint() {
+  if (stageState.answered) return;
+  const q = stageState.qs[stageState.qIndex];
+  if (stageState.hintLevel >= 3) return;
+
+  if (stageState.hintLevel > 0 && player.items.hints > 0) {
+    player.items.hints -= 1;
+    savePlayer();
+    document.getElementById('pu-hint-count').textContent = `${player.items.hints} miễn phí`;
+  }
+
+  playSoundEffect('click');
+  const hintBox = document.getElementById('hint-box');
+  hintBox.classList.add('show');
+  hintBox.innerHTML += `<div class="hint-step">💡 <b>${q.hints[stageState.hintLevel]}</b></div>`;
+
+  stageState.hintLevel += 1;
+  document.getElementById('hint-level-txt').textContent = `${stageState.hintLevel}/3`;
+  if (stageState.hintLevel >= 3) document.getElementById('pu-hint').disabled = true;
+}
+
+function useFiftyFifty() {
+  const q = stageState.qs[stageState.qIndex];
+  if (q.type !== 'mc' || q.options.length <= 2 || player.items.fifty <= 0 || stageState.answered) return;
+  playSoundEffect('click');
+  player.items.fifty -= 1;
+  savePlayer();
+  document.getElementById('pu-fifty-count').textContent = player.items.fifty;
+  document.getElementById('pu-fifty').disabled = true;
+
+  const btns = document.querySelectorAll('.opt-btn');
+  let eliminated = 0;
+  btns.forEach((b, i) => {
+    if (i !== q.ans && eliminated < 1) {
+      b.classList.add('eliminated');
+      eliminated++;
+    }
+  });
+}
+
+function useSkip() {
+  if (player.items.skip <= 0 || stageState.answered) return;
+  playSoundEffect('click');
+  player.items.skip -= 1;
+  savePlayer();
+  stageState.results[stageState.qIndex] = 'done';
+  nextQuestion();
+}
+
+function useHeal() {
+  if (player.items.heal <= 0 || stageState.hearts >= 5) return;
+  playSoundEffect('correct');
+  player.items.heal -= 1;
+  stageState.hearts += 1;
+  savePlayer();
+  document.getElementById('pu-heal-count').textContent = player.items.heal;
+  document.getElementById('hearts-display').textContent = '❤️'.repeat(stageState.hearts) + '🖤'.repeat(5 - stageState.hearts);
+  if (stageState.hearts >= 5 || player.items.heal <= 0) document.getElementById('pu-heal').disabled = true;
+}
+
+// Quy đổi chuỗi như "-1/4", "0,5" về số để so sánh giá trị tương đương
+function parseMathVal(str) {
+  const t = String(str).trim().replace(/,/g, '.').replace(/\s+/g, '');
+  if (t.includes('/')) {
+    const p = t.split('/');
+    if (p.length === 2 && p[0] !== '' && p[1] !== '' && !isNaN(p[0]) && !isNaN(p[1]) && Number(p[1]) !== 0) return Number(p[0]) / Number(p[1]);
+    return null;
+  }
+  return (t !== '' && !isNaN(t)) ? Number(t) : null;
+}
+function fillEquivalent(input, answers) {
+  const u = parseMathVal(input);
+  if (u === null) return false;
+  return answers.some(a => { const v = parseMathVal(a); return v !== null && Math.abs(u - v) < 1e-6; });
+}
+
+// =========================================================================
+// 5B. GIAO DIỆN CÁC DẠNG: GHÉP CẶP / SẮP XẾP / TRỤC SỐ
+// =========================================================================
+const PAIR_COLORS = ['#f59e0b', '#3b82f6', '#ec4899', '#10b981', '#8b5cf6', '#ef4444'];
+
+function currentQ() { return stageState.qs[stageState.qIndex]; }
+
+function shuffleIdx(n) {
+  const a = [...Array(n).keys()];
+  for (let tries = 0; tries < 10; tries++) {
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    if (n < 2 || a.some((v, i) => v !== i)) break; // tránh trường hợp đã đúng sẵn
+  }
+  return a;
+}
+
+function setCheckReady(ready) {
+  document.getElementById('btn-check-answer').disabled = !ready;
+}
+
+function initSpecial(q) {
+  const labels = { match: 'GHÉP CẶP', order: 'SẮP XẾP', numline: 'TRỤC SỐ' };
+  document.getElementById('q-type-label').textContent = labels[q.type];
+  document.getElementById('mc-area').style.display = 'none';
+  document.getElementById('fill-area').style.display = 'none';
+  ['match', 'order', 'numline'].forEach(k => {
+    document.getElementById(k + '-area').style.display = (k === q.type) ? 'block' : 'none';
+  });
+  if (q.type === 'match') {
+    stageState.mOrder = shuffleIdx(q.left.length);
+    stageState.mPairs = q.left.map(() => -1);
+    stageState.mSel = null;
+    drawMatch(q);
+  } else if (q.type === 'order') {
+    stageState.oPool = shuffleIdx(q.items.length);
+    stageState.oSeq = [];
+    drawOrder(q);
+  } else {
+    stageState.nlSel = null;
+    drawNumline(q);
+  }
+}
+
+// ---------- Ghép cặp ----------
+function drawMatch(q) {
+  const st = stageState, done = st.answered, n = q.left.length;
+  let h = '<div class="sp-hint">Chạm một ô bên trái, rồi chạm ô tương ứng bên phải. Chạm lại ô đã ghép để gỡ.</div><div class="mt-grid"><div class="mt-col">';
+  for (let i = 0; i < n; i++) {
+    const p = st.mPairs[i];
+    let cls = 'mt-item';
+    if (st.mSel === i) cls += ' sel';
+    if (p >= 0) cls += ' paired';
+    if (done) cls += (p === i) ? ' ok' : ' bad';
+    h += `<button class="${cls}" style="--pc:${PAIR_COLORS[i % 6]}" ${done ? 'disabled' : ''} onclick="matchTapLeft(${i})"><span class="mt-num">${i + 1}</span><span>${q.left[i]}</span></button>`;
+  }
+  h += '</div><div class="mt-col">';
+  st.mOrder.forEach(ri => {
+    const li = st.mPairs.indexOf(ri);
+    let cls = 'mt-item';
+    let badge = '<span class="mt-num empty">·</span>';
+    let style = '';
+    if (li >= 0) {
+      cls += ' paired';
+      style = `--pc:${PAIR_COLORS[li % 6]}`;
+      badge = `<span class="mt-num">${li + 1}</span>`;
+    }
+    if (done) cls += (li === ri) ? ' ok' : ' bad';
+    h += `<button class="${cls}" style="${style}" ${done ? 'disabled' : ''} onclick="matchTapRight(${ri})">${badge}<span>${q.right[ri]}</span></button>`;
+  });
+  h += '</div></div>';
+  document.getElementById('match-area').innerHTML = h;
+  if (!done) setCheckReady(st.mPairs.every(p => p >= 0));
+}
+
+function matchTapLeft(i) {
+  const st = stageState;
+  if (st.answered) return;
+  playSoundEffect('click');
+  if (st.mPairs[i] >= 0) { st.mPairs[i] = -1; st.mSel = i; }
+  else st.mSel = (st.mSel === i) ? null : i;
+  drawMatch(currentQ());
+}
+
+function matchTapRight(ri) {
+  const st = stageState;
+  if (st.answered) return;
+  playSoundEffect('click');
+  const prev = st.mPairs.indexOf(ri);
+  if (st.mSel !== null) {
+    if (prev >= 0) st.mPairs[prev] = -1;
+    st.mPairs[st.mSel] = ri;
+    st.mSel = null;
+  } else if (prev >= 0) {
+    st.mPairs[prev] = -1;
+  }
+  drawMatch(currentQ());
+}
+
+function gradeMatch(q) {
+  const ok = stageState.mPairs.every((p, i) => p === i);
+  const html = q.left.map((l, i) => `${l} ↔ ${q.right[i]}`).join('<br>');
+  drawMatch(q);
+  return { isCorrect: ok, html };
+}
+
+// ---------- Sắp xếp ----------
+function drawOrder(q) {
+  const st = stageState, done = st.answered, n = q.items.length;
+  let h = '<div class="od-label">Thứ tự của em (chạm để gỡ):</div><div class="od-slots">';
+  for (let k = 0; k < n; k++) {
+    const v = st.oSeq[k];
+    if (v === undefined) {
+      h += `<div class="od-slot"><span class="od-n">${k + 1}</span></div>`;
+    } else {
+      const cls = done ? (v === k ? ' ok' : ' bad') : '';
+      h += `<button class="od-slot filled${cls}" ${done ? 'disabled' : ''} onclick="orderRemove(${k})"><span class="od-n">${k + 1}</span><span>${q.items[v]}</span></button>`;
+    }
+  }
+  h += '</div><div class="od-label">Các mục cần sắp xếp (chạm để chọn):</div><div class="od-pool">';
+  st.oPool.forEach(v => {
+    const used = st.oSeq.includes(v);
+    h += `<button class="od-chip${used ? ' used' : ''}" ${(used || done) ? 'disabled' : ''} onclick="orderPick(${v})">${q.items[v]}</button>`;
+  });
+  h += '</div>';
+  document.getElementById('order-area').innerHTML = h;
+  if (!done) setCheckReady(st.oSeq.length === n);
+}
+
+function orderPick(v) {
+  const st = stageState, q = currentQ();
+  if (st.answered || st.oSeq.includes(v) || st.oSeq.length >= q.items.length) return;
+  playSoundEffect('click');
+  st.oSeq.push(v);
+  drawOrder(q);
+}
+
+function orderRemove(k) {
+  const st = stageState;
+  if (st.answered) return;
+  playSoundEffect('click');
+  st.oSeq.splice(k, 1);
+  drawOrder(currentQ());
+}
+
+function gradeOrder(q) {
+  const ok = stageState.oSeq.every((v, k) => v === k);
+  const html = q.items.map((x, i) => `${i + 1}. ${x}`).join('<br>');
+  drawOrder(q);
+  return { isCorrect: ok, html };
+}
+
+// ---------- Trục số ----------
+function nlGcd(a, b) { return b ? nlGcd(b, a % b) : Math.abs(a); }
+function nlValueHtml(t, div) {
+  const g = nlGcd(t, div) || 1, n = t / g, d = div / g;
+  if (d === 1) return String(n).replace('-', '−');
+  return (n < 0 ? '−' : '') + F(Math.abs(n), d);
+}
+
+function drawNumline(q) {
+  const st = stageState, done = st.answered;
+  const W = 360, H = 112, pad = 26, y = 52;
+  const lo = q.min * q.div, hi = q.max * q.div;
+  const step = (W - 2 * pad) / (hi - lo);
+  const X = t => pad + (t - lo) * step;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" class="nl-svg">`;
+  svg += `<line x1="${pad - 12}" y1="${y}" x2="${W - pad + 12}" y2="${y}" stroke="#231f42" stroke-width="3" stroke-linecap="round"/>`;
+  for (let t = lo; t <= hi; t++) {
+    const major = (t % q.div === 0);
+    const h = major ? 12 : 7;
+    svg += `<line x1="${X(t)}" y1="${y - h}" x2="${X(t)}" y2="${y + h}" stroke="#231f42" stroke-width="${major ? 3 : 2}"/>`;
+    if (major) svg += `<text x="${X(t)}" y="${y + 34}" text-anchor="middle" font-size="16">${String(t / q.div).replace('-', '−')}</text>`;
+  }
+  if (done && st.nlSel !== q.tick) {
+    svg += `<circle cx="${X(q.tick)}" cy="${y}" r="9" fill="#22c55e" stroke="#231f42" stroke-width="3"/>`;
+  }
+  if (st.nlSel !== null) {
+    const fill = done ? (st.nlSel === q.tick ? '#22c55e' : '#ef4444') : '#ffc42e';
+    svg += `<circle cx="${X(st.nlSel)}" cy="${y}" r="9" fill="${fill}" stroke="#231f42" stroke-width="3"/>`;
+  }
+  if (!done) {
+    for (let t = lo; t <= hi; t++) {
+      svg += `<rect x="${X(t) - step / 2}" y="10" width="${step}" height="${H - 20}" fill="transparent" style="cursor:pointer" onclick="nlPick(${t})"/>`;
+    }
+  }
+  svg += '</svg>';
+  const read = st.nlSel === null ? 'Chạm vào vạch trên trục số để đặt điểm' : `Em đặt điểm tại: ${nlValueHtml(st.nlSel, q.div)}`;
+  document.getElementById('numline-area').innerHTML = svg + `<div class="nl-read">${read}</div>`;
+  if (!done) setCheckReady(st.nlSel !== null);
+}
+
+function nlPick(t) {
+  if (stageState.answered) return;
+  playSoundEffect('click');
+  stageState.nlSel = t;
+  drawNumline(currentQ());
+}
+
+function gradeNumline(q) {
+  const ok = stageState.nlSel === q.tick;
+  drawNumline(q);
+  return { isCorrect: ok, html: q.ansDisplay };
+}
+
+function checkAnswer() {
+  if (stageState.answered) return;
+  stageState.answered = true;
+
+  const q = stageState.qs[stageState.qIndex];
+  let isCorrect = false;
+  let correctDisplayHtml = '';
+
+  if (q.type === 'mc') {
+    isCorrect = (stageState.selectedOpt === q.ans);
+    correctDisplayHtml = q.options[q.ans];
+    const btns = document.querySelectorAll('.opt-btn');
+    btns.forEach((b, idx) => {
+      if (idx === q.ans) b.classList.add('correct');
+      else if (idx === stageState.selectedOpt && !isCorrect) b.classList.add('incorrect');
+    });
+  } else if (q.type === 'fill') {
+    const cleanInput = stageState.fillText.replace(/\s+/g, '').replace('−', '-');
+    isCorrect = q.ansText.includes(cleanInput) || fillEquivalent(cleanInput, q.ansText);
+    correctDisplayHtml = q.ansDisplay;
+  } else {
+    const g = (q.type === 'match') ? gradeMatch(q) : (q.type === 'order') ? gradeOrder(q) : gradeNumline(q);
+    isCorrect = g.isCorrect;
+    correctDisplayHtml = g.html;
+  }
+
+  ensurePlayerTopicStats(player);
+  const tag = q.topicTag || "So sánh, sắp xếp";
+  player.topicStats[tag].done += 1;
+
+  document.getElementById('btn-check-answer').style.display = 'none';
+  const resPanel = document.getElementById('result-panel');
+  resPanel.classList.add('show');
+
+  if (isCorrect) {
+    playSoundEffect('correct');
+    stageState.results[stageState.qIndex] = 'done';
+    const gainXp = Math.round(10 * stageState.mult);
+    const gainCoins = Math.round(4 * stageState.mult);
+
+    player.xp += gainXp;
+    player.coins += gainCoins;
+    player.totalCorrect += 1;
+
+    resPanel.className = 'result-panel show ok';
+    document.getElementById('res-title').innerHTML = '✅ Tuyệt vời!';
+    document.getElementById('res-rewards').innerHTML = `<span class="rew-pill">+${gainXp} XP</span><span class="rew-pill">+${gainCoins} 🪙</span>`;
+    document.getElementById('res-mistake').style.display = 'none';
+  } else {
+    playSoundEffect('wrong');
+    stageState.results[stageState.qIndex] = 'wrong';
+    player.topicStats[tag].wrong += 1;
+    stageState.hearts = Math.max(0, stageState.hearts - 1);
+    document.getElementById('hearts-display').textContent = '❤️'.repeat(stageState.hearts) + '🖤'.repeat(5 - stageState.hearts);
+
+    resPanel.className = 'result-panel show bad';
+    document.getElementById('res-title').innerHTML = '❌ Chưa chính xác!';
+    document.getElementById('res-rewards').innerHTML = `<span class="rew-pill">−1 ❤️</span>`;
+
+    const mistakeBox = document.getElementById('res-mistake');
+    mistakeBox.style.display = 'block';
+    mistakeBox.innerHTML = `⚠️ <b>Lỗi sai thường gặp:</b> ${q.mistake}`;
+  }
+
+  document.getElementById('res-correct-ans').innerHTML = `<b>Đáp án đúng:</b> ${correctDisplayHtml}`;
+  document.getElementById('res-explanation').innerHTML = `<b>Lời giải từng bước:</b><br>${q.steps}`;
+
+  savePlayer();
+  updateHud();
+  resPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function nextQuestion() {
+  playSoundEffect('click');
+  if (stageState.hearts <= 0) {
+    alert("Hiệp sĩ đã hết tim rồi! Hãy nghỉ ngơi hoặc vào Cửa hàng mua Bình hồi máu rồi thử sức lại nhé!");
+    enterHub();
+    return;
+  }
+
+  if (stageState.qIndex + 1 < stageState.qs.length) {
+    stageState.qIndex += 1;
+    renderQuestion();
+  } else {
+    finishStage();
+  }
+}
+
+function finishStage() {
+  playSoundEffect('win');
+  const landIdx = stageState.landIdx;
+  const correctCount = stageState.results.filter(r => r === 'done').length;
+
+  const starBonus = stageState.diff === 'hard' ? 3 : (stageState.diff === 'medium' ? 2 : 1);
+  const totalQ = stageState.qs.length;
+  // Quy đổi về thang 8 câu như bản gốc để tối đa vẫn là 24 sao/vùng
+  const earnedStars = Math.min(24, Math.round(correctCount / totalQ * 8 * starBonus));
+  if (earnedStars > player.landStars[landIdx]) {
+    player.landStars[landIdx] = earnedStars;
+  }
+
+  const badgeIds = ["b2", "b3", "b4", "b5", "b6"];
+  const passNeed = Math.ceil(totalQ * 0.6); // bản gốc: 5/8 câu
+  if (correctCount >= passNeed) {
+    if (!player.badges.includes(badgeIds[landIdx])) player.badges.push(badgeIds[landIdx]);
+    if (landIdx === player.unlockedLand && player.unlockedLand < LANDS.length - 1) player.unlockedLand += 1;
+  }
+
+  savePlayer();
+  submitResultsToSheet(true);
+
+  alert(`🎉 Chúc mừng ${player.name} đã hoàn thành ${LANDS[landIdx].name}!
+• Số câu đúng: ${correctCount}/${totalQ}
+• Sao đạt được: ${player.landStars[landIdx]}/24 ⭐
+• Kết quả đã được tự động gửi về cho Thầy/Cô!`);
+  enterHub();
+}
+
+// =========================================================================
+// 6. GỬI & TẢI KẾT QUẢ QUA GOOGLE APPS SCRIPT (/EXEC) + TRANG GIÁO VIÊN
+// =========================================================================
+function submitResultsToSheet(isSilent = false) {
+  if (!player) return;
+  const url = teacherConfig.scriptUrl || DEFAULT_SCRIPT_URL;
+  const totalStars = player.landStars.reduce((a, b) => a + b, 0);
+  const statusEl = document.getElementById('submit-status');
+
+  if (!isSilent && statusEl) {
+    statusEl.style.color = '#2563eb';
+    statusEl.textContent = '⏳ Đang gửi kết quả lên hệ thống của Thầy/Cô...';
+  }
+
+  const totalDone = Object.values(player.topicStats || {}).reduce((s, x) => s + x.done, 0) || player.totalCorrect;
+  // Tìm dạng yếu nhất của học sinh
+  let weakestTopic = "Chưa có lỗi sai";
+  let maxWrongRate = 0;
+  Object.entries(player.topicStats || {}).forEach(([topic, st]) => {
+    if (st.done > 0 && st.wrong > 0) {
+      const rate = Math.round((st.wrong / st.done) * 100);
+      if (rate >= maxWrongRate) {
+        maxWrongRate = rate;
+        weakestTopic = `${topic} (${rate}% sai)`;
+      }
+    }
+  });
+
+  const payload = {
+    tenHocSinh: player.name,
+    lop: player.studentClass,
+    diemSo: `${totalStars}/120 sao (${player.totalCorrect} câu đúng)`,
+    chiTiet: JSON.stringify({
+      capDo: player.level,
+      sao: totalStars,
+      cauDung: player.totalCorrect,
+      tongCauDaLam: totalDone,
+      vungDatMo: player.unlockedLand + (player.landStars[4] >= 15 ? 1 : 0),
+      dangYeuNhat: weakestTopic,
+      topicStats: player.topicStats
+    })
+  };
+
+  fetch(url, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    if (!isSilent && statusEl) {
+      playSoundEffect('correct');
+      statusEl.style.color = '#15803d';
+      statusEl.textContent = '✅ Đã nộp bài thành công về bảng điểm của Giáo viên!';
+    }
+  })
+  .catch(() => {
+    if (!isSilent && statusEl) {
+      statusEl.style.color = '#dc2626';
+      statusEl.textContent = '⚠️ Lỗi kết nối mạng, em hãy thử bấm nộp lại nhé!';
+    }
+  });
+}
+
+// Dữ liệu học sinh trong Trang Giáo Viên (tải từ Google Sheets + gộp dữ liệu chơi thực tế)
+let teacherRecords = [];
+
+function openTeacherDashboard() {
+  playSoundEffect('click');
+  document.getElementById('app').classList.add('wide-mode');
+  showScreen('screen-teacher');
+
+  // Nạp ngay dữ liệu hiện có trên máy trước để giáo viên thấy tức thì
+  teacherRecords = getSavedStudentsList();
+  populateClassFilter();
+  renderTeacherDashboard();
+
+  // Tự động gọi tải dữ liệu mới nhất từ Google Sheets
+  fetchTeacherResults();
+}
+
+function exitTeacherDashboard() {
+  playSoundEffect('click');
+  document.getElementById('app').classList.remove('wide-mode');
+  showScreen('screen-home');
+}
+
+function switchTdTab(tabKey, btnEl) {
+  playSoundEffect('click');
+  document.querySelectorAll('.td-tab-btn').forEach(b => b.classList.remove('active'));
+  btnEl.classList.add('active');
+
+  ['support', 'ranking', 'weakness', 'chart'].forEach(k => {
+    document.getElementById('td-view-' + k).style.display = (k === tabKey) ? 'block' : 'none';
+  });
+}
+
+function fetchTeacherResults() {
+  const url = teacherConfig.scriptUrl || DEFAULT_SCRIPT_URL;
+  const msgEl = document.getElementById('td-sync-msg');
+  const btnEl = document.getElementById('btn-fetch-results');
+
+  msgEl.textContent = "⏳ Đang tải kết quả mới nhất từ Google Sheets...";
+  btnEl.disabled = true;
+
+  fetch(url + "?action=getResults")
+    .then(res => res.json())
+    .then(data => {
+      btnEl.disabled = false;
+      const rows = Array.isArray(data) ? data : (data.data || data.records || []);
+      if (rows.length > 0) {
+        const parsed = parseSheetRows(rows);
+        if (parsed.length > 0) {
+          teacherRecords = parsed;
+          localStorage.setItem('vqht_all_students', JSON.stringify(teacherRecords));
+        }
+      }
+      const now = new Date();
+      document.getElementById('td-last-update').textContent = `Cập nhật lúc ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+      msgEl.textContent = `✅ Đã tải xong ${teacherRecords.length} hồ sơ học sinh. Chọn lớp ở góc trên để lọc kết quả.`;
+      populateClassFilter();
+      renderTeacherDashboard();
+    })
+    .catch(() => {
+      btnEl.disabled = false;
+      teacherRecords = getSavedStudentsList();
+      msgEl.textContent = `📋 Đang hiển thị ${teacherRecords.length} hồ sơ học sinh đã lưu (Kiểm tra quyền truy cập "Bất kỳ ai" của Apps Script nếu muốn đồng bộ trực tuyến).`;
+      populateClassFilter();
+      renderTeacherDashboard();
+    });
+}
+
+function parseSheetRows(rows) {
+  const mapByStudent = {};
+  rows.forEach(r => {
+    const name = (r.tenHocSinh || r["Tên học sinh"] || r["Họ và tên"] || "").toString().trim();
+    if (!name) return;
+    const cls = (r.lop || r["Lớp"] || "7A").toString().trim().toUpperCase();
+    const diemStr = (r.diemSo || r["Điểm số"] || "").toString();
+    const chiTietStr = (r.chiTiet || r["Chi tiết"] || "").toString();
+
+    let stars = 0, level = 1, correct = 0, totalDone = 0, vungDatMo = 1, topicStats = {};
+    const starMatch = diemStr.match(/(\d+)\s*\/\s*120/);
+    if (starMatch) stars = parseInt(starMatch[1], 10);
+    const corrMatch = diemStr.match(/\((\d+)\s*câu/);
+    if (corrMatch) correct = parseInt(corrMatch[1], 10);
+
+    try {
+      if (chiTietStr.startsWith("{")) {
+        const obj = JSON.parse(chiTietStr);
+        level = obj.capDo || Math.floor((correct * 10) / 100) + 1;
+        stars = obj.sao ?? stars;
+        correct = obj.cauDung ?? correct;
+        totalDone = obj.tongCauDaLam || correct;
+        vungDatMo = obj.vungDatMo || 1;
+        topicStats = obj.topicStats || {};
+      } else {
+        const lvlM = chiTietStr.match(/Cấp\s*(\d+)/i);
+        if (lvlM) level = parseInt(lvlM[1], 10);
+      }
+    } catch (e) {}
+
+    const key = `${name.toLowerCase()}__${cls}`;
+    // Luôn giữ bản ghi mới nhất / cao nhất của học sinh
+    if (!mapByStudent[key] || stars >= mapByStudent[key].sao) {
+      mapByStudent[key] = {
+        tenHocSinh: name,
+        lop: cls,
+        capDo: level,
+        sao: stars,
+        cauDung: correct,
+        tongCauDaLam: Math.max(totalDone, correct),
+        vungDatMo: vungDatMo,
+        topicStats: topicStats
+      };
+    }
+  });
+  return Object.values(mapByStudent);
+}
+
+function populateClassFilter() {
+  const select = document.getElementById('td-class-filter');
+  const currentVal = select.value;
+  const classes = [...new Set(teacherRecords.map(r => r.lop).filter(Boolean))].sort();
+
+  select.innerHTML = `<option value="ALL">Lớp: Tất cả (${classes.length} lớp)</option>`;
+  classes.forEach(c => {
+    select.innerHTML += `<option value="${c}">Lớp: ${c}</option>`;
+  });
+
+  if (classes.includes(currentVal)) select.value = currentVal;
+  else select.value = "ALL";
+}
+
+function renderTeacherDashboard() {
+  const selectedClass = document.getElementById('td-class-filter').value;
+  const filtered = selectedClass === "ALL"
+    ? teacherRecords
+    : teacherRecords.filter(r => r.lop === selectedClass);
+
+  document.getElementById('td-badge-class').textContent = selectedClass === "ALL" ? "Lớp: Tất cả" : `Lớp: ${selectedClass}`;
+  document.getElementById('td-chart-class-lbl').textContent = selectedClass === "ALL" ? "Tất cả lớp" : `Lớp ${selectedClass}`;
+
+  // 1. KPI Summary Cards
+  const totalStudents = filtered.length;
+  const totalQuestionsDone = filtered.reduce((sum, s) => sum + (s.tongCauDaLam || s.cauDung || 0), 0);
+  const completedAll5 = filtered.filter(s => (s.vungDatMo || 1) >= 5 || s.sao >= 80).length;
+
+  document.getElementById('td-kpi-grid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-big">${totalStudents} <small>em</small></div>
+      <div class="kpi-sub">${selectedClass === "ALL" ? "đã tham gia làm bài ở nhà" : `học sinh lớp ${selectedClass} đã chơi`}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-big">${totalQuestionsDone.toLocaleString('vi-VN')}</div>
+      <div class="kpi-sub">câu hỏi các em đã tự làm</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-big">${completedAll5} <small>em</small></div>
+      <div class="kpi-sub">đã đi hết cả 5/5 vùng đất</div>
+    </div>
+  `;
+
+  // 2. Class breakdown cards (hiển thị từng lớp như 7A4, 7A7 ở ảnh 2)
+  const allClasses = [...new Set(teacherRecords.map(r => r.lop).filter(Boolean))].sort();
+  const classGrid = document.getElementById('td-class-breakdown');
+  classGrid.innerHTML = '';
+  allClasses.forEach(cls => {
+    const stuInCls = teacherRecords.filter(r => r.lop === cls);
+    const qInCls = stuInCls.reduce((sum, s) => sum + (s.tongCauDaLam || s.cauDung || 0), 0);
+    const pctWidth = Math.min(100, Math.round((stuInCls.length / 40) * 100));
+    const isSelected = (selectedClass === cls);
+    classGrid.innerHTML += `
+      <div class="class-stat-card" style="${isSelected ? 'border-color:#0f5c52; background:#f0fdfa;' : ''}; cursor:pointer;" onclick="quickFilterClass('${cls}')">
+        <div class="class-badge">${cls}</div>
+        <div class="class-bar-wrap">
+          <div style="font-size:14px; font-weight:800;"><b>${stuInCls.length} em</b> đã chơi • <b>${qInCls.toLocaleString('vi-VN')}</b> câu</div>
+          <div class="class-bar-bg"><div class="class-bar-fill" style="width:${Math.max(12, pctWidth)}%"></div></div>
+        </div>
+      </div>
+    `;
+  });
+
+  // 3. Mục 3 (Ảnh 1): Dạng cả lớp sai nhiều nhất + Tên học sinh cần hỗ trợ
+  const topicAgg = {};
+  ALL_TOPICS_14.forEach(t => {
+    topicAgg[t] = { done: 0, wrong: 0, needHelpStudents: [] };
+  });
+
+  filtered.forEach(stu => {
+    const stats = stu.topicStats || {};
+    Object.entries(stats).forEach(([tName, st]) => {
+      if (!topicAgg[tName]) topicAgg[tName] = { done: 0, wrong: 0, needHelpStudents: [] };
+      topicAgg[tName].done += (st.done || 0);
+      topicAgg[tName].wrong += (st.wrong || 0);
+      if ((st.wrong || 0) >= 1) {
+        topicAgg[tName].needHelpStudents.push({
+          name: stu.tenHocSinh,
+          wrong: st.wrong,
+          done: st.done
+        });
+      }
+    });
+  });
+
+  // Sắp xếp các dạng bài theo tỉ lệ sai / số học sinh cần hỗ trợ giảm dần
+  const sortedTopics = Object.entries(topicAgg)
+    .map(([name, info]) => {
+      const rate = info.done > 0 ? Math.round((info.wrong / info.done) * 100) : 0;
+      return { name, ...info, rate };
+    })
+    .filter(item => item.wrong > 0 || item.needHelpStudents.length > 0)
+    .sort((a, b) => b.rate - a.rate || b.needHelpStudents.length - a.needHelpStudents.length);
+
+  const supportTbody = document.getElementById('td-support-tbody');
+  supportTbody.innerHTML = '';
+  if (sortedTopics.length === 0) {
+    supportTbody.innerHTML = `<tr><td colspan="2" style="text-align:center; color:#64748b; padding:20px;">Chưa ghi nhận lỗi sai nào ở lớp đang chọn (hoặc chưa có học sinh nộp bài).</td></tr>`;
+  } else {
+    sortedTopics.forEach(t => {
+      const pillsHtml = t.needHelpStudents
+        .sort((a, b) => b.wrong - a.wrong)
+        .map(s => `<span class="pill-student" title="Sai ${s.wrong}/${s.done} câu">${s.name}</span>`)
+        .join('');
+      supportTbody.innerHTML += `
+        <tr>
+          <td>
+            <div style="font-weight:900; color:#0f172a;">${t.name}</div>
+            <div style="font-size:12px; color:#c24136; font-weight:800;">Sai ${t.rate}% (${t.wrong}/${t.done} lượt)</div>
+          </td>
+          <td>${pillsHtml}</td>
+        </tr>
+      `;
+    });
+  }
+
+  // 4. Mục 1: Bảng xếp hạng
+  const ranked = [...filtered].sort((a, b) => b.sao - a.sao || b.cauDung - a.cauDung);
+  document.getElementById('td-rank-count').textContent = `${ranked.length} học sinh`;
+  const rankTbody = document.getElementById('td-ranking-tbody');
+  rankTbody.innerHTML = '';
+  if (ranked.length === 0) {
+    rankTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#64748b; padding:20px;">Chưa có dữ liệu học sinh cho lớp này.</td></tr>`;
+  } else {
+    ranked.forEach((s, idx) => {
+      const medal = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx + 1}`));
+      rankTbody.innerHTML += `
+        <tr>
+          <td style="font-weight:900;">${medal}</td>
+          <td style="font-weight:900; color:#0f172a;">${s.tenHocSinh}</td>
+          <td><span class="pill-good">${s.lop}</span></td>
+          <td>Cấp ${s.capDo}</td>
+          <td style="color:#d97706; font-weight:900;">⭐ ${s.sao}/120</td>
+          <td>${s.cauDung} câu</td>
+        </tr>
+      `;
+    });
+  }
+
+  // 5. Mục 2: Dạng yếu nhất của từng người
+  const weakTbody = document.getElementById('td-weakness-tbody');
+  weakTbody.innerHTML = '';
+  if (ranked.length === 0) {
+    weakTbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b; padding:20px;">Chưa có dữ liệu học sinh.</td></tr>`;
+  } else {
+    ranked.forEach(s => {
+      let weakTopic = "Hoàn thành tốt các dạng";
+      let weakRate = 0;
+      Object.entries(s.topicStats || {}).forEach(([tName, st]) => {
+        if (st.done > 0 && st.wrong > 0) {
+          const r = Math.round((st.wrong / st.done) * 100);
+          if (r >= weakRate) {
+            weakRate = r;
+            weakTopic = tName;
+          }
+        }
+      });
+      weakTbody.innerHTML += `
+        <tr>
+          <td style="font-weight:900;">${s.tenHocSinh}</td>
+          <td>${s.lop}</td>
+          <td>${weakRate > 0 ? `<span class="pill-weak">${weakTopic}</span>` : `<span class="pill-good">${weakTopic}</span>`}</td>
+          <td style="font-weight:800; color:${weakRate > 0 ? '#b91c1c' : '#15803d'};">${weakRate > 0 ? `${weakRate}% làm sai` : '0% sai'}</td>
+        </tr>
+      `;
+    });
+  }
+
+  // 6. Biểu đồ tỉ lệ làm sai theo dạng bài (như ảnh 2)
+  const chartContainer = document.getElementById('td-chart-container');
+  chartContainer.innerHTML = '';
+  const chartTopics = sortedTopics.length > 0
+    ? sortedTopics
+    : ALL_TOPICS_14.slice(0, 5).map(name => ({ name, rate: 0 }));
+
+  chartTopics.forEach(item => {
+    chartContainer.innerHTML += `
+      <div class="chart-row">
+        <div class="chart-label">${item.name}</div>
+        <div class="chart-track">
+          <div class="chart-bar-bg">
+            <div class="chart-bar-val" style="width:${item.rate}%;"></div>
+          </div>
+          <div class="chart-pct">${item.rate}%</div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function quickFilterClass(cls) {
+  const select = document.getElementById('td-class-filter');
+  select.value = (select.value === cls) ? "ALL" : cls;
+  renderTeacherDashboard();
+}
+
+// Khởi chạy ứng dụng
+initApp();
+</script>
+</body>
+</html>
